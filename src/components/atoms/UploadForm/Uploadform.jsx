@@ -20,12 +20,23 @@ const UploadForm = () => {
     return () => clearInterval(interval);
   }, []);
 
+  //changing the size if dive on page changes
+
   useEffect(() => {
     let interval = setTimeout(() => {
       changeSize();
     }, 1000);
     return () => clearInterval(interval);
   }, [currentPage, randomImages]);
+
+  // changing the size if dive on per page
+
+  useEffect(() => {
+    let interval = setTimeout(() => {
+      changeSize();
+    }, 5000);
+    return () => clearInterval(interval);
+  });
 
   function handleChangePage(event, page) {
     setCurrentPage(page);
