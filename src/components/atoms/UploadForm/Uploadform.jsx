@@ -110,16 +110,29 @@ const UploadForm = () => {
         <input type="file" />
         <span>+</span>
       </label>
-      <Pagination
-        count={Math.ceil(randomImages.length / imagesPerPage)}
-        page={currentPage}
-        onChange={handleChangePage}
-        variant="outlined"
-        shape="rounded"
-        color="primary"
-      />
+      <div className="d-flex justify-content-end">
+        <Pagination
+          count={Math.ceil(randomImages.length / imagesPerPage)}
+          page={currentPage}
+          onChange={handleChangePage}
+          variant="outlined"
+          shape="rounded"
+          color="primary"
+        />
+      </div>
+
       <div className="output">{randomDivisions}</div>
 
+      <div className="d-flex justify-content-end mt-4">
+        <Pagination
+          count={Math.ceil(randomImages.length / imagesPerPage)}
+          page={currentPage}
+          onChange={handleChangePage}
+          variant="outlined"
+          shape="rounded"
+          color="primary"
+        />
+      </div>
       <Dialog open={open} onClose={handleCloseDialog}>
         {/* <DialogTitle>Image Dialog</DialogTitle> */}
         <div className="dialog-image-container">
@@ -128,9 +141,6 @@ const UploadForm = () => {
             size={40}
             onClick={handleImageDownload}
           />
-          {/* <button className="btn btn-primary md-outline-downloading">
-            Download
-          </button> */}
           {selectedImage && (
             <img
               src={selectedImage.urls.full}
