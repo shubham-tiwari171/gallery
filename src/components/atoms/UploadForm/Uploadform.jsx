@@ -3,6 +3,7 @@ import Pagination from "@mui/material/Pagination";
 import { MdOutlineDownloading } from "react-icons/md";
 import axios from "axios";
 import { Dialog, DialogTitle } from "@mui/material";
+import Title from "../Title/Title";
 import "./Uploadform.css";
 
 const UploadForm = () => {
@@ -99,10 +100,16 @@ const UploadForm = () => {
         });
 
         // Create a temporary anchor element
+        const randomImageNumber =
+          Math.floor(Math.random() * (500 - 300 + 1)) + 300;
         const link = document.createElement("a");
         link.href = URL.createObjectURL(response.data);
         console.log(response.description);
-        link.download = selectedImage.description + ".jpg"; // Specify the desired filename
+        link.download =
+          selectedImage.description === null ||
+          selectedImage.description === undefined
+            ? "Image" + randomImageNumber + ".jpg"
+            : selectedImage.description + ".jpg";
 
         // Simulate a click event to trigger the download
         link.click();
@@ -116,52 +123,62 @@ const UploadForm = () => {
   };
 
   return (
-    <form>
-      <label>
-        <input type="file" />
-        <span>+</span>
-      </label>
-      <div className="d-flex justify-content-end">
-        <Pagination
-          count={Math.ceil(randomImages.length / imagesPerPage)}
-          page={currentPage}
-          onChange={handleChangePage}
-          variant="outlined"
-          shape="rounded"
-          color="primary"
-        />
-      </div>
-
-      <div className="output">{randomDivisions}</div>
-
-      <div className="d-flex justify-content-end mt-4">
-        <Pagination
-          count={Math.ceil(randomImages.length / imagesPerPage)}
-          page={currentPage}
-          onChange={handleChangePage}
-          variant="outlined"
-          shape="rounded"
-          color="primary"
-        />
-      </div>
-      <Dialog open={open} onClose={handleCloseDialog}>
-        {/* <DialogTitle>Image Dialog</DialogTitle> */}
-        <div className="dialog-image-container">
-          <MdOutlineDownloading
-            className={"md-outline-downloading"}
-            size={40}
-            onClick={handleImageDownload}
+    <>
+      <Title />
+      <form>
+        <label>
+          <input type="file" />
+          <span>+</span>
+        </label>
+        <div
+          className="d-flex justify-content-end"
+          style={{ marginRight: "4rem" }}
+        >
+          <Pagination
+            count={Math.ceil(randomImages.length / imagesPerPage)}
+            page={currentPage}
+            onChange={handleChangePage}
+            variant="outlined"
+            shape="rounded"
+            color="secondary"
+            style={{ color: "#fff", backgroundColor: "white" }}
           />
-          {selectedImage && (
-            <img
-              src={selectedImage.urls.full}
-              alt={selectedImage.alt_description}
-              className="dialog-image-container"
-            />
-          )}
         </div>
-      </Dialog>
-    </form>
+
+        <div className="output">{randomDivisions}</div>
+
+        <div
+          className="d-flex justify-content-end mt-4"
+          style={{ marginRight: "4rem" }}
+        >
+          <Pagination
+            count={Math.ceil(randomImages.length / imagesPerPage)}
+            page={currentPage}
+            onChange={handleChangePage}
+            variant="outlined"
+            shape="rounded"
+            color="primary"
+          />
+        </div>
+        <Dialog open={open} onClose={handleCloseDialog}>
+          {/* <DialogTitle>Image Dialog</DialogTitle> */}
+          <div className="dialog-image-container">
+            <MdOutlineDownloading
+              className={"md-outline-downloading"}
+              size={40}
+              onClick={handleImageDownload}
+            />
+            {selectedImage && (
+              <img
+                src={selectedImage.urls.full}
+                alt={selectedImage.alt_description}
+                className="dialog-image-container"
+              />
+            )}
+          </div>
+        </Dialog>
+      </form>
+    </>
   );
 };
 

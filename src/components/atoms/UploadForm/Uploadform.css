@@ -1,3 +1,15 @@
+@import url("https://fonts.googleapis.com/css2?family=Noto+Serif:wght@400;700&display=swap");
+
+:root {
+  --primary: #efb6b2;
+  --secondary: #4e4e4e;
+  --error: #ff4a4a;
+}
+/* base styles & title */
+body {
+  font-family: "Noto Serif";
+  color: var(--secondary);
+}
 .output {
   margin-top: 2rem;
   width: 100%;
@@ -18,7 +30,7 @@
   overflow: hidden;
   box-shadow: 2.2px 4.3px 4.3px hsl(0deg 0% 0% / 0.43);
   cursor: pointer;
-  transition: all 300ms ease-in-out;
+  transition: all 1000ms ease-in-out;
 }
 
 .image-container {
@@ -50,7 +62,16 @@
   color: rgb(37, 35, 35);
   cursor: pointer;
 }
-/* .md-outline-downloading:hover {
-  border-radius: 50%;
-  background-color: rgb(53, 50, 50);
-} */
+
+/* upload form styles */
+
+.error {
+  color: var(--error);
+}
+
+/* progress bar styles */
+.progress-bar {
+  height: 5px;
+  background: var(--primary);
+  margin-top: 20px;
+}
