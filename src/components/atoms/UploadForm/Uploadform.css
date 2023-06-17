@@ -25,12 +25,12 @@ body {
 }
 
 .box {
-  margin: 0.5rem;
+  margin: 0.4rem;
   border-radius: 10px;
   overflow: hidden;
   box-shadow: 2.2px 4.3px 4.3px hsl(0deg 0% 0% / 0.43);
   cursor: pointer;
-  transition: all 1000ms ease-in-out;
+  transition: all 1500ms ease-in-out;
 }
 
 .image-container {

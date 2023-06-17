@@ -5,12 +5,12 @@ import axios from "axios";
 import { Dialog, DialogTitle } from "@mui/material";
 import Title from "../Title/Title";
 import "./Uploadform.css";
-
+import Header from "../Header/Header";
 const UploadForm = () => {
   const [randomDivisions, setRandomDivisions] = useState([]);
   const [randomImages, setRandomImages] = useState([]);
   const [currentPage, setCurrentPage] = useState(1);
-  const [imagesPerPage] = useState(10);
+  const [imagesPerPage] = useState(15);
   const [open, setOpen] = useState(false);
   const [selectedImage, setSelectedImage] = useState(null);
 
@@ -55,8 +55,8 @@ const UploadForm = () => {
   const changeSize = () => {
     const paginatedImages = paginateImages(currentPage);
     const divs = paginatedImages.map((image) => {
-      const height = Math.floor(Math.random() * (500 - 300 + 1)) + 300 + "px";
-      const width = Math.floor(Math.random() * (500 - 300 + 1)) + 300 + "px";
+      const height = Math.floor(Math.random() * (500 - 200 + 1)) + 200 + "px";
+      const width = Math.floor(Math.random() * (500 - 200 + 1)) + 200 + "px";
       const divStyle = {
         height,
         width,
@@ -65,7 +65,7 @@ const UploadForm = () => {
         <div key={image.id} style={divStyle} className="box">
           <div className="image-container">
             <img
-              src={image.urls.small}
+              src={image.urls.regular}
               alt={image.alt_description}
               className="image"
               onClick={() => handleOpenDialog(image)}
@@ -124,25 +124,31 @@ const UploadForm = () => {
 
   return (
     <>
-      <Title />
+      {/* <Title /> */}
+      <Header />
       <form>
-        <label>
+        {/* <label>
           <input type="file" />
           <span>+</span>
-        </label>
+        </label> */}
         <div
-          className="d-flex justify-content-end"
+          className="d-flex justify-content-end mt-4"
           style={{ marginRight: "4rem" }}
         >
-          <Pagination
+          {/* <Pagination
             count={Math.ceil(randomImages.length / imagesPerPage)}
             page={currentPage}
             onChange={handleChangePage}
             variant="outlined"
             shape="rounded"
             color="secondary"
-            style={{ color: "#fff", backgroundColor: "white" }}
-          />
+            style={{
+              color: "#fff",
+              backgroundColor: "white",
+              marginTop: "1rem",
+            }}
+          /> */}
+          hii
         </div>
 
         <div className="output">{randomDivisions}</div>
