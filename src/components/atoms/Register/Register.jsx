@@ -18,6 +18,8 @@ const Register = () => {
   const [username, setUsername] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [confirmPassword, setConfirmPassword] = useState("");
+  const [mobile, setMobile] = useState("");
 
   const handleOpen = () => {
     setOpen(true);
@@ -108,20 +110,20 @@ const Register = () => {
                             value={email}
                             onChange={(e) => setUsername(e.target.value)}
                             margin="normal"
-                            type="email"
+                            type=""
                             required
                             fullWidth
-                          />{" "}
+                          />
                         </div>
                       </div>
                       <div className="col-md-6 ">
                         <div className="form-outline">
                           <TextField
-                            label="UserName"
+                            label="Email"
                             value={email}
                             onChange={(e) => setUsername(e.target.value)}
                             margin="normal"
-                            type="email"
+                            type=""
                             required
                             fullWidth
                           />{" "}
@@ -133,11 +135,11 @@ const Register = () => {
                       <div className="col-md-6  d-flex align-items-center">
                         <div className="form-outline datepicker w-100">
                           <TextField
-                            label="UserName"
-                            value={email}
+                            label="Password"
+                            value={password}
                             onChange={(e) => setUsername(e.target.value)}
                             margin="normal"
-                            type="email"
+                            type="password"
                             required
                             fullWidth
                           />{" "}
@@ -146,11 +148,11 @@ const Register = () => {
                       <div className="col-md-6  d-flex align-items-center">
                         <div className="form-outline datepicker w-100">
                           <TextField
-                            label="UserName"
-                            value={email}
+                            label="Confirm password"
+                            value={confirmPassword}
                             onChange={(e) => setUsername(e.target.value)}
                             margin="normal"
-                            type="email"
+                            type="password"
                             required
                             fullWidth
                           />{" "}
@@ -162,11 +164,11 @@ const Register = () => {
                       <div className="col-md-6  d-flex align-items-center">
                         <div className="form-outline datepicker w-100">
                           <TextField
-                            label="UserName"
-                            value={email}
+                            label="Mobile no"
+                            value={mobile}
                             onChange={(e) => setUsername(e.target.value)}
                             margin="normal"
-                            type="email"
+                            type=""
                             required
                             fullWidth
                           />{" "}
