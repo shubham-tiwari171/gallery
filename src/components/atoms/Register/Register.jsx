@@ -1,18 +1,12 @@
 import React, { useState } from "react";
-import Button from "@mui/material/Button";
 import TextField from "@mui/material/TextField";
-import Dialog from "@mui/material/Dialog";
-import DialogTitle from "@mui/material/DialogTitle";
-import DialogContent from "@mui/material/DialogContent";
-import DialogActions from "@mui/material/DialogActions";
 import Radio from "@mui/material/Radio";
 import RadioGroup from "@mui/material/RadioGroup";
 import FormControlLabel from "@mui/material/FormControlLabel";
 import FormControl from "@mui/material/FormControl";
 import FormLabel from "@mui/material/FormLabel";
-
-import IconButton from "@mui/material/IconButton";
 import "./Register.css";
+import { useFormik } from "formik";
 const Register = () => {
   const [open, setOpen] = useState(false);
   const [username, setUsername] = useState("");
@@ -21,22 +15,22 @@ const Register = () => {
   const [confirmPassword, setConfirmPassword] = useState("");
   const [mobile, setMobile] = useState("");
 
-  const handleOpen = () => {
-    setOpen(true);
-  };
-
-  const handleClose = () => {
-    setOpen(false);
-  };
-
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    // Perform registration logic here
-    console.log("Username:", username);
-    console.log("Email:", email);
-    console.log("Password:", password);
-    handleClose();
-  };
+  const { values, errors, touched, handleBlur, handleChange, handleSubmit } =
+    useFormik({
+      initialValues: {
+        userName: "",
+        email: "",
+        password: "",
+        confirmPassword: "",
+        gender: "",
+      },
+      onSubmit: (values, action) => {
+        console.log(
+          "🚀 ~ file: Registration.jsx ~ line 11 ~ Registration ~ values",
+          values
+        );
+      },
+    });
 
   return (
     <>
@@ -101,18 +95,20 @@ const Register = () => {
               <div className="card shadow-2-strong card-registration">
                 <div className="card-body">
                   <h2 className="mb-4">Create account</h2>
-                  <form>
+                  <form onSubmit={handleSubmit}>
                     <div className="row">
                       <div className="col-md-6 ">
                         <div className="form-outline">
                           <TextField
                             label="UserName"
-                            value={email}
-                            onChange={(e) => setUsername(e.target.value)}
+                            name="userName"
                             margin="normal"
                             type=""
                             required
                             fullWidth
+                            value={values.userName}
+                            onChange={handleChange}
+                            onBlur={handleBlur}
                           />
                         </div>
                       </div>
@@ -120,12 +116,14 @@ const Register = () => {
                         <div className="form-outline">
                           <TextField
                             label="Email"
-                            value={email}
-                            onChange={(e) => setUsername(e.target.value)}
+                            name="email"
                             margin="normal"
                             type=""
                             required
                             fullWidth
+                            value={values.email}
+                            onChange={handleChange}
+                            onBlur={handleBlur}
                           />{" "}
                         </div>
                       </div>
@@ -136,12 +134,14 @@ const Register = () => {
                         <div className="form-outline datepicker w-100">
                           <TextField
                             label="Password"
-                            value={password}
-                            onChange={(e) => setUsername(e.target.value)}
+                            name="password"
                             margin="normal"
                             type="password"
                             required
                             fullWidth
+                            value={values.password}
+                            onChange={handleChange}
+                            onBlur={handleBlur}
                           />{" "}
                         </div>
                       </div>
@@ -149,12 +149,14 @@ const Register = () => {
                         <div className="form-outline datepicker w-100">
                           <TextField
                             label="Confirm password"
-                            value={confirmPassword}
-                            onChange={(e) => setUsername(e.target.value)}
+                            name="confirmPassword"
                             margin="normal"
                             type="password"
                             required
                             fullWidth
+                            value={values.confirmPassword}
+                            onChange={handleChange}
+                            onBlur={handleBlur}
                           />{" "}
                         </div>
                       </div>
@@ -165,12 +167,14 @@ const Register = () => {
                         <div className="form-outline datepicker w-100">
                           <TextField
                             label="Mobile no"
-                            value={mobile}
-                            onChange={(e) => setUsername(e.target.value)}
+                            name={mobile}
                             margin="normal"
                             type=""
                             required
                             fullWidth
+                            value={values.mobile}
+                            onChange={handleChange}
+                            onBlur={handleBlur}
                           />{" "}
                         </div>
                       </div>
@@ -186,22 +190,25 @@ const Register = () => {
                           <RadioGroup
                             row
                             aria-labelledby="demo-row-radio-buttons-group-label"
-                            name="row-radio-buttons-group"
+                            name="gender"
+                            value={values.gender}
+                            onChange={handleChange}
+                            onBlur={handleBlur}
                           >
                             <FormControlLabel
-                              value="female"
                               control={<Radio />}
                               label="Female"
+                              value="female"
                             />
                             <FormControlLabel
-                              value="male"
                               control={<Radio />}
                               label="Male"
+                              value="male"
                             />
                             <FormControlLabel
-                              value="other"
                               control={<Radio />}
                               label="Other"
+                              value="others"
                             />
                           </RadioGroup>
                         </FormControl>{" "}
