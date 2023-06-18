@@ -7,86 +7,134 @@ import FormControl from "@mui/material/FormControl";
 import FormLabel from "@mui/material/FormLabel";
 import "./Register.css";
 import { useFormik } from "formik";
+import { signUpSignInSchema } from "../../../schemas";
+import { createUser, getAllUser } from "../../../api/apiEndpoint";
+import { v4 as uuidv4 } from "uuid";
+import Snackbar from "@mui/material/Snackbar";
+import MuiAlert from "@mui/material/Alert";
+import { useEffect } from "react";
 const Register = () => {
-  const [open, setOpen] = useState(false);
-  const [username, setUsername] = useState("");
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
-  const [confirmPassword, setConfirmPassword] = useState("");
-  const [mobile, setMobile] = useState("");
+  const [openSnackbar, setOpenSnackbar] = useState({
+    open: false,
+    vertical: "top",
+    horizontal: "right",
+    severity: "warning",
+  });
+  const [snackbarMessage, setSnackbarMessage] = useState("");
+  const [allUsers, setAllUsers] = useState([]);
+  const [createButtonDisabled, setCreateButtonDisabled] = useState(false);
 
-  const { values, errors, touched, handleBlur, handleChange, handleSubmit } =
-    useFormik({
-      initialValues: {
-        userName: "",
-        email: "",
-        password: "",
-        confirmPassword: "",
-        gender: "",
-      },
-      onSubmit: (values, action) => {
-        console.log(
-          "🚀 ~ file: Registration.jsx ~ line 11 ~ Registration ~ values",
-          values
-        );
-      },
-    });
+  useEffect(() => {
+    const fetchUsers = async () => {
+      const users = await getAllUser();
+      setAllUsers(users);
+    };
+
+    fetchUsers();
+  }, []);
+
+  const { values, errors, touched, handleBlur, handleChange } = useFormik({
+    initialValues: {
+      userName: "",
+      email: "",
+      password: "",
+      confirmPassword: "",
+      mobile: "",
+      gender: "",
+    },
+    validationSchema: signUpSignInSchema,
+    // onSubmit: (values, action) => {
+    //   console.log(
+    //     "🚀 ~ file: Registration.jsx ~ line 11 ~ Registration ~ values",
+    //     values
+    //   );
+    // },
+  });
+  useEffect(() => {
+    setCreateButtonDisabled(Object.keys(errors).length > 0);
+  }, [errors]);
+
+  const handleSnackbarClose = () => {
+    setOpenSnackbar((prevState) => ({
+      ...prevState,
+      open: false,
+    }));
+    setSnackbarMessage("");
+  };
+
+  const handleSubmit = async (event) => {
+    // for preventing the for to reload
+    event.preventDefault();
+
+    // creating user data
+    let user = {
+      id: uuidv4(),
+      ...values,
+      board: [],
+    };
+
+    // checking the user already exists or not
+    let isUserExist = allUsers.some(
+      (existedUser) =>
+        existedUser.userName === user.userName &&
+        existedUser.email === user.email
+    );
+
+    // giving message that user allready exit in snack bar
+    if (isUserExist) {
+      setOpenSnackbar((prevState) => ({
+        ...prevState,
+        open: true,
+        severity: "warning",
+      }));
+      setSnackbarMessage(
+        "User with the same username and email already exists."
+      );
+      return;
+    }
+
+    // all validation done then creating user and saving it ito data base and displaying message
+    let res = await createUser(user);
+
+    setOpenSnackbar((prevState) => ({
+      ...prevState,
+      open: true,
+      severity: "success",
+    }));
+
+    if (res.status === 201 && user) {
+      setSnackbarMessage("User registered successfully!");
+    } else {
+      setOpenSnackbar((prevState) => ({
+        ...prevState,
+        open: true,
+        severity: "danger",
+      }));
+      setSnackbarMessage("An error occurred during user registration.");
+    }
+  };
 
   return (
     <>
-      {/* <Button variant="contained" color="primary" onClick={handleOpen}>
-        Register
-      </Button>
-      <Dialog open={open} onClose={handleClose}>
-        <DialogTitle>Register</DialogTitle>
-        <DialogContent>
-          <form onSubmit={handleSubmit}>
-            <TextField
-              label="UserName"
-              value={email}
-              onChange={(e) => setUsername(e.target.value)}
-              margin="normal"
-              type="email"
-              required
-              fullWidth
-            />
-            <TextField
-              label="Email"
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
-              margin="normal"
-              type="email"
-              required
-              fullWidth
-            />
-            <TextField
-              label="Password"
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
-              margin="normal"
-              type="password"
-              required
-              fullWidth
-            />
-
-            <TextField
-              label="Confirm password"
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
-              margin="normal"
-              type="password"
-              required
-              fullWidth
-            />
-            <DialogActions>
-              <Button onClick={handleClose}>Cancel</Button>
-              <Button type="submit" variant="contained" color="primary">
-                Register
-              </Button>
-            </DialogActions>
-          </form>
-        </DialogContent>
-      </Dialog> */}
+      <Snackbar
+        open={openSnackbar.open}
+        autoHideDuration={5000}
+        onClose={handleSnackbarClose}
+        anchorOrigin={{
+          vertical: openSnackbar.vertical,
+          horizontal: openSnackbar.horizontal,
+        }}
+        key={openSnackbar.vertical + openSnackbar.horizontal}
+      >
+        <MuiAlert
+          elevation={6}
+          variant="filled"
+          onClose={handleSnackbarClose}
+          severity={openSnackbar.severity}
+        >
+          {snackbarMessage}
+        </MuiAlert>
+      </Snackbar>
 
       <section className="vh-100 gradient-custom">
         <div className="container py-5 h-100">
@@ -94,12 +142,15 @@ const Register = () => {
             <div className="col-12 col-lg-9 col-xl-7">
               <div className="card shadow-2-strong card-registration">
                 <div className="card-body">
-                  <h2 className="mb-4">Create account</h2>
+                  <h2 className="mb-4">Create your account</h2>
                   <form onSubmit={handleSubmit}>
                     <div className="row">
                       <div className="col-md-6 ">
                         <div className="form-outline">
                           <TextField
+                            error={
+                              errors.userName && touched.userName ? true : false
+                            }
                             label="UserName"
                             name="userName"
                             margin="normal"
@@ -109,12 +160,18 @@ const Register = () => {
                             value={values.userName}
                             onChange={handleChange}
                             onBlur={handleBlur}
+                            helperText={
+                              errors.userName && touched.userName
+                                ? errors.userName
+                                : ""
+                            }
                           />
                         </div>
                       </div>
                       <div className="col-md-6 ">
                         <div className="form-outline">
                           <TextField
+                            error={errors.email && touched.email ? true : false}
                             label="Email"
                             name="email"
                             margin="normal"
@@ -124,6 +181,9 @@ const Register = () => {
                             value={values.email}
                             onChange={handleChange}
                             onBlur={handleBlur}
+                            helperText={
+                              errors.email && touched.email ? errors.email : ""
+                            }
                           />{" "}
                         </div>
                       </div>
@@ -133,6 +193,9 @@ const Register = () => {
                       <div className="col-md-6  d-flex align-items-center">
                         <div className="form-outline datepicker w-100">
                           <TextField
+                            error={
+                              errors.password && touched.password ? true : false
+                            }
                             label="Password"
                             name="password"
                             margin="normal"
@@ -142,12 +205,22 @@ const Register = () => {
                             value={values.password}
                             onChange={handleChange}
                             onBlur={handleBlur}
+                            helperText={
+                              errors.password && touched.password
+                                ? errors.password
+                                : ""
+                            }
                           />{" "}
                         </div>
                       </div>
                       <div className="col-md-6  d-flex align-items-center">
                         <div className="form-outline datepicker w-100">
                           <TextField
+                            error={
+                              errors.confirmPassword && touched.confirmPassword
+                                ? true
+                                : false
+                            }
                             label="Confirm password"
                             name="confirmPassword"
                             margin="normal"
@@ -157,6 +230,11 @@ const Register = () => {
                             value={values.confirmPassword}
                             onChange={handleChange}
                             onBlur={handleBlur}
+                            helperText={
+                              errors.confirmPassword && touched.confirmPassword
+                                ? errors.confirmPassword
+                                : ""
+                            }
                           />{" "}
                         </div>
                       </div>
@@ -166,8 +244,11 @@ const Register = () => {
                       <div className="col-md-6  d-flex align-items-center">
                         <div className="form-outline datepicker w-100">
                           <TextField
+                            error={
+                              errors.mobile && touched.mobile ? true : false
+                            }
                             label="Mobile no"
-                            name={mobile}
+                            name="mobile"
                             margin="normal"
                             type=""
                             required
@@ -175,7 +256,12 @@ const Register = () => {
                             value={values.mobile}
                             onChange={handleChange}
                             onBlur={handleBlur}
-                          />{" "}
+                            helperText={
+                              errors.mobile && touched.mobile
+                                ? errors.mobile
+                                : ""
+                            }
+                          />
                         </div>
                       </div>
 
@@ -215,11 +301,13 @@ const Register = () => {
                       </div>
                     </div>
                     <div className="mt-4 pt-2">
-                      <input
+                      <button
+                        disabled={createButtonDisabled}
                         className="btn btn-primary btn-lg"
                         type="submit"
-                        value="Submit"
-                      />
+                      >
+                        Submit
+                      </button>
                     </div>
                   </form>
                 </div>
