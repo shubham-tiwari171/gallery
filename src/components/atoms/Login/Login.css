@@ -18,5 +18,19 @@
   background-color: #3b71ca;
   color: white;
 }
-.login-box {
+.container {
+  background-attachment: fixed;
+  background-repeat: no-repeat;
+  background-size: 6%;
+  background-position: center;
+  transition: all 300ms ease-in-out;
+}
+.loading-gif-container {
+  height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+.loading-gif-container > img {
+  height: 7rem;
 }

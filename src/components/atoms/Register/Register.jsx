@@ -13,6 +13,7 @@ import { v4 as uuidv4 } from "uuid";
 import Snackbar from "@mui/material/Snackbar";
 import MuiAlert from "@mui/material/Alert";
 import { useEffect } from "react";
+import { useNavigate } from "react-router-dom";
 const Register = () => {
   const [openSnackbar, setOpenSnackbar] = useState({
     open: false,
@@ -23,6 +24,7 @@ const Register = () => {
   const [snackbarMessage, setSnackbarMessage] = useState("");
   const [allUsers, setAllUsers] = useState([]);
   const [createButtonDisabled, setCreateButtonDisabled] = useState(false);
+  const nevigate = useNavigate();
 
   useEffect(() => {
     const fetchUsers = async () => {
@@ -33,23 +35,24 @@ const Register = () => {
     fetchUsers();
   }, []);
 
-  const { values, errors, touched, handleBlur, handleChange } = useFormik({
-    initialValues: {
-      userName: "",
-      email: "",
-      password: "",
-      confirmPassword: "",
-      mobile: "",
-      gender: "",
-    },
-    validationSchema: signUpSignInSchema,
-    // onSubmit: (values, action) => {
-    //   console.log(
-    //     "🚀 ~ file: Registration.jsx ~ line 11 ~ Registration ~ values",
-    //     values
-    //   );
-    // },
-  });
+  const { values, errors, touched, handleBlur, handleChange, resetForm } =
+    useFormik({
+      initialValues: {
+        userName: "",
+        email: "",
+        password: "",
+        confirmPassword: "",
+        mobile: "",
+        gender: "",
+      },
+      validationSchema: signUpSignInSchema,
+      // onSubmit: (values, action) => {
+      //   console.log(
+      //     "🚀 ~ file: Registration.jsx ~ line 11 ~ Registration ~ values",
+      //     values
+      //   );
+      // },
+    });
   useEffect(() => {
     setCreateButtonDisabled(Object.keys(errors).length > 0);
   }, [errors]);
@@ -63,7 +66,7 @@ const Register = () => {
   };
 
   const handleSubmit = async (event) => {
-    // for preventing the for to reload
+    // for preventing the form from reloading
     event.preventDefault();
 
     // creating user data
@@ -73,14 +76,14 @@ const Register = () => {
       board: [],
     };
 
-    // checking the user already exists or not
-    let isUserExist = allUsers.some(
+    // checking if the user already exists
+    let isUserExist = allUsers.find(
       (existedUser) =>
-        existedUser.userName === user.userName &&
+        existedUser.userName === user.userName ||
         existedUser.email === user.email
     );
 
-    // giving message that user allready exit in snack bar
+    // giving message that user already exists in the snackbar
     if (isUserExist) {
       setOpenSnackbar((prevState) => ({
         ...prevState,
@@ -93,17 +96,18 @@ const Register = () => {
       return;
     }
 
-    // all validation done then creating user and saving it ito data base and displaying message
+    // all validation done then creating the user and saving it to the database and displaying a success message
     let res = await createUser(user);
 
-    setOpenSnackbar((prevState) => ({
-      ...prevState,
-      open: true,
-      severity: "success",
-    }));
-
     if (res.status === 201 && user) {
+      setOpenSnackbar((prevState) => ({
+        ...prevState,
+        open: true,
+        severity: "success",
+      }));
       setSnackbarMessage("User registered successfully!");
+      resetForm();
+      nevigate("/login");
     } else {
       setOpenSnackbar((prevState) => ({
         ...prevState,
@@ -306,7 +310,7 @@ const Register = () => {
                         className="btn btn-primary btn-lg"
                         type="submit"
                       >
-                        Submit
+                        Create
                       </button>
                     </div>
                   </form>

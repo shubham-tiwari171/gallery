@@ -21,7 +21,7 @@ const Header = () => {
           <input
             type="text"
             className={`${styles["myInput"]}`}
-            placeholder="Enter your text"
+            placeholder="Search..."
           />
         </div>
         <div className={`${styles["menu-items"]}`}>Create</div>
