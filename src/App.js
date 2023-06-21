@@ -12,9 +12,11 @@ function App() {
   const navigate = useNavigate();
 
   useEffect(() => {
+    // logout quickely
     if (Object.keys(user).length === 0) {
       navigate('/login');
     }
+    //check for login 
     if (!isLoggedIn) {
       const timer = setTimeout(() => {
         navigate('/login');
