@@ -18,7 +18,7 @@ function App() {
     if (!isLoggedIn) {
       const timer = setTimeout(() => {
         navigate('/login');
-      }, 5000);
+      }, 60000);
 
       return () => clearTimeout(timer);
     }
