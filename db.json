@@ -20909,33 +20909,14 @@
   ],
   "users": [
     {
-      "id": "1643ceac-1e5f-41a5-a07c-06bdca09da23",
-      "userName": "shubham",
-      "email": "tshubhamucem@gmail.com",
-      "password": "123456",
-      "confirmPassword": "123456",
-      "mobile": "1234567891",
-      "gender": "male",
-      "board": []
-    },
-    {
-      "id": "1ebaa87a-a7c2-45ab-8fa2-ffbdf03f2e72",
-      "userName": "asda",
-      "email": "tshubhamucem@gmail.com",
+      "id": "049d9870-d70d-4cbc-86b7-cc595a0f5a27",
+      "userName": "Neha",
+      "email": "neha@gmail.com",
       "password": "123456",
       "confirmPassword": "123456",
       "mobile": "8881946755",
-      "gender": "",
-      "board": []
-    },
-    {
-      "id": "4c7cb429-8cce-4632-aaf0-1fb546e6a185",
-      "userName": "xzc",
-      "email": "example@gmail.com",
-      "password": "123456",
-      "confirmPassword": "123456",
-      "mobile": "6545425598",
-      "gender": "male",
+      "gender": "female",
+      "profileImage": "blob:http://localhost:3000/a9062e28-fb97-440c-bade-f09131f3e9b0",
       "board": []
     }
   ]

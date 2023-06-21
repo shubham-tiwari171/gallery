@@ -14,6 +14,7 @@ import Snackbar from "@mui/material/Snackbar";
 import MuiAlert from "@mui/material/Alert";
 import { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
+import { Link } from "react-router-dom";
 const Register = () => {
   const [openSnackbar, setOpenSnackbar] = useState({
     open: false,
@@ -73,6 +74,7 @@ const Register = () => {
     let user = {
       id: uuidv4(),
       ...values,
+      profileImage: "./male_avatar.png",
       board: [],
     };
 
@@ -107,7 +109,9 @@ const Register = () => {
       }));
       setSnackbarMessage("User registered successfully!");
       resetForm();
-      nevigate("/login");
+      setTimeout(() => {
+        nevigate("/login");
+      }, 2000);
     } else {
       setOpenSnackbar((prevState) => ({
         ...prevState,
@@ -304,7 +308,11 @@ const Register = () => {
                         </FormControl>{" "}
                       </div>
                     </div>
-                    <div className="mt-4 pt-2">
+
+                    <div className="mt-4 d-flex justify-content-around align-items-center">
+                      <p>
+                        Go back to login? <Link to="/login">Login</Link>
+                      </p>
                       <button
                         disabled={createButtonDisabled}
                         className="btn btn-primary btn-lg"

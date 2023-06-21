@@ -9,7 +9,8 @@ import MuiAlert from "@mui/material/Alert";
 import { getAllUser } from "../../../api/apiEndpoint";
 import { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-
+import { setUser, login } from "../../../redux/reducers/reducers";
+import { useDispatch } from "react-redux";
 const Login = () => {
   const [openSnackbar, setOpenSnackbar] = useState({
     open: false,
@@ -21,6 +22,7 @@ const Login = () => {
   const [snackbarMessage, setSnackbarMessage] = useState("");
   const [allUsers, setAllUsers] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
+  const dispatch = useDispatch();
   const { values, errors, touched, handleBlur, handleChange } = useFormik({
     initialValues: {
       email: "",
@@ -54,7 +56,7 @@ const Login = () => {
 
   const handleSubmit = (event) => {
     event.preventDefault();
-    let isUserExist = allUsers.some(
+    let isUserExist = allUsers.find(
       (existedUser) =>
         existedUser.email === values.email &&
         existedUser.password === values.password
@@ -69,8 +71,10 @@ const Login = () => {
       setSnackbarMessage("Login successful!");
       setIsLoading(true);
       setTimeout(() => {
-        navigate("/uploadform");
-      }, 3000);
+        dispatch(login());
+        dispatch(setUser(isUserExist));
+        navigate("/");
+      }, 5000);
     } else {
       setOpenSnackbar((prevState) => ({
         ...prevState,
@@ -85,7 +89,7 @@ const Login = () => {
     <>
       <Snackbar
         open={openSnackbar.open}
-        autoHideDuration={5000}
+        autoHideDuration={3000}
         onClose={handleSnackbarClose}
         anchorOrigin={{
           vertical: openSnackbar.vertical,

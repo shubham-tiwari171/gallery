@@ -1,20 +1,33 @@
-import logo from './logo.svg';
-import './App.css';
-// import Title from './components/atoms/Title/Title'
-import { Route, Routes } from 'react-router-dom';
-import UploadForm from './components/atoms/UploadForm/Uploadform';
+import React, { useEffect, useState } from 'react';
+import { Route, Routes, useNavigate } from 'react-router-dom';
 import Register from './components/atoms/Register/Register';
 import Login from './components/atoms/Login/Login';
+import { Pages } from './components/Pages/Pages';
+import { useSelector } from 'react-redux';
+
 function App() {
+  const { user, isLoggedIn } = useSelector((state) => state.user);
+  console.log(isLoggedIn)
+  const navigate = useNavigate();
+  const [showPage, setShowPage] = useState(true);
+
+  useEffect(() => {
+    if (!isLoggedIn) {
+      const timer = setTimeout(() => {
+        navigate('/login');
+      }, 5000);
+
+      return () => clearTimeout(timer);
+    }
+  }, [navigate, isLoggedIn]);
+
   return (
     <div className="App">
       <Routes>
-        <Route path='/uploadform' element={<UploadForm />}></Route>
-        <Route path='/register' element={<Register />}></Route>
-        <Route path='/login' element={<Login />}></Route>
+        <Route path="/" element={<Pages />} />
+        {!isLoggedIn && <Route path="/login" element={<Login />} />}
+        <Route path="/register" element={<Register />} />
       </Routes>
-      {/* <Title /> */}
-
     </div>
   );
 }

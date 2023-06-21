@@ -55,8 +55,8 @@ const UploadForm = () => {
   const changeSize = () => {
     const paginatedImages = paginateImages(currentPage);
     const divs = paginatedImages.map((image) => {
-      const height = Math.floor(Math.random() * (500 - 200 + 1)) + 200 + "px";
-      const width = Math.floor(Math.random() * (500 - 200 + 1)) + 200 + "px";
+      const height = Math.floor(Math.random() * (500 - 400 + 1)) + 300 + "px";
+      const width = Math.floor(Math.random() * (500 - 400 + 1)) + 300 + "px";
       const divStyle = {
         height,
         width,
@@ -125,7 +125,6 @@ const UploadForm = () => {
   return (
     <>
       {/* <Title /> */}
-      <Header />
       <form>
         {/* <label>
           <input type="file" />
@@ -148,13 +147,12 @@ const UploadForm = () => {
               marginTop: "1rem",
             }}
           /> */}
-          hii
         </div>
 
         <div className="output">{randomDivisions}</div>
 
         <div
-          className="d-flex justify-content-end mt-4"
+          className="d-flex justify-content-end mt-2"
           style={{ marginRight: "4rem" }}
         >
           <Pagination
