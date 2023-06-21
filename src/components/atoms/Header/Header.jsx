@@ -4,7 +4,7 @@ import axios from "axios";
 import { RxCamera } from "react-icons/rx";
 import { updatUserProfile } from "../../../api/apiEndpoint";
 import { useSelector, useDispatch } from "react-redux";
-import { setUser } from "../../../redux/reducers/reducers";
+import { setUser, logout } from "../../../redux/reducers/reducers";
 import { getUser } from "../../../api/apiEndpoint";
 
 const Header = () => {
@@ -27,6 +27,10 @@ const Header = () => {
 
   const handleClick = () => {
     // Handle click logic
+  };
+
+  const handleLogoutClick = () => {
+    dispatch(logout());
   };
 
   const handleSelectProfileImageClick = async (e) => {
@@ -69,7 +73,9 @@ const Header = () => {
             placeholder="Search..."
           />
         </div>
-        <div className={styles["menu-items"]}>Logout</div>
+        <div className={styles["menu-items"]} onClick={handleLogoutClick}>
+          Logout
+        </div>
         <div
           className={`${styles["menu-items"]} ${styles["profile-menu-items"]}`}
         >
