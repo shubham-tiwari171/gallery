@@ -3,15 +3,18 @@ import { Route, Routes, useNavigate } from 'react-router-dom';
 import Register from './components/atoms/Register/Register';
 import Login from './components/atoms/Login/Login';
 import { Pages } from './components/Pages/Pages';
-import { useSelector } from 'react-redux';
+import { useSelector, useDispatch } from 'react-redux';
 
 function App() {
   const { user, isLoggedIn } = useSelector((state) => state.user);
+  const dispatch = useDispatch()
   console.log(isLoggedIn)
   const navigate = useNavigate();
-  const [showPage, setShowPage] = useState(true);
 
   useEffect(() => {
+    if (Object.keys(user).length === 0) {
+      navigate('/login');
+    }
     if (!isLoggedIn) {
       const timer = setTimeout(() => {
         navigate('/login');
