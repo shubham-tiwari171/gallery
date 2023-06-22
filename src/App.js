@@ -15,14 +15,14 @@ function App() {
   useEffect(() => {
 
     // logout quickely
-    if (Object.keys(user).length === 0 && location.pathname !== "/register") {
+    if (Object.keys(user).length === 0 && location.pathname !== "/register" && location.pathname !== "/") {
       navigate('/login');
     }
     //check for login 
-    if (!isLoggedIn) {
+    if (!isLoggedIn && location.pathname !== '/login' && location.pathname !== "/register" && location.pathname !== "/") {
       const timer = setTimeout(() => {
         navigate('/login');
-      }, 60000);
+      }, 5000);
       return () => clearTimeout(timer);
     }
   }, [navigate, isLoggedIn]);
