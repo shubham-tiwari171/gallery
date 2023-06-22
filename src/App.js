@@ -13,16 +13,15 @@ function App() {
   const navigate = useNavigate();
 
   useEffect(() => {
-
     // logout quickely
-    if (Object.keys(user).length === 0 && location.pathname !== "/register" && location.pathname !== "/") {
+    if (Object.keys(user).length === 0 && location.pathname !== '/login' && location.pathname !== '/register') {
       navigate('/login');
     }
     //check for login 
-    if (!isLoggedIn && location.pathname !== '/login' && location.pathname !== "/register" && location.pathname !== "/") {
+    if (!isLoggedIn && location.pathname !== '/login' && location.pathname !== "/register") {
       const timer = setTimeout(() => {
         navigate('/login');
-      }, 5000);
+      }, 60000);
       return () => clearTimeout(timer);
     }
   }, [navigate, isLoggedIn]);

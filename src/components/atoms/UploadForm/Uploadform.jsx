@@ -153,19 +153,21 @@ const UploadForm = () => {
 
         <div className="output">{randomDivisions}</div>
 
-        <div
-          className="d-flex justify-content-end mt-2"
-          style={{ marginRight: "4rem" }}
-        >
-          <Pagination
-            count={Math.ceil(randomImages.length / imagesPerPage)}
-            page={currentPage}
-            onChange={handleChangePage}
-            variant="outlined"
-            shape="rounded"
-            color="primary"
-          />
-        </div>
+        {isLoggedIn && (
+          <div
+            className="d-flex justify-content-end mt-2"
+            style={{ marginRight: "4rem" }}
+          >
+            <Pagination
+              count={Math.ceil(randomImages.length / imagesPerPage)}
+              page={currentPage}
+              onChange={handleChangePage}
+              variant="outlined"
+              shape="rounded"
+              color="primary"
+            />
+          </div>
+        )}
         <Dialog open={open} onClose={handleCloseDialog}>
           {/* <DialogTitle>Image Dialog</DialogTitle> */}
           <div className="dialog-image-container">
