@@ -18,7 +18,6 @@ function App() {
     if (Object.keys(user).length === 0 && location.pathname !== "/register") {
       navigate('/login');
     }
-
     //check for login 
     if (!isLoggedIn) {
       const timer = setTimeout(() => {
