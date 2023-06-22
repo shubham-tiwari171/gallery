@@ -3,26 +3,18 @@ import { Route, Routes, useNavigate } from 'react-router-dom';
 import Register from './components/atoms/Register/Register';
 import Login from './components/atoms/Login/Login';
 import { Pages } from './components/Pages/Pages';
-import { useSelector } from 'react-redux';
+import { useSelector, useDispatch } from 'react-redux';
 import { useLocation } from 'react-router-dom';
+import { logout } from './redux/reducers/reducers';
 
 function App() {
   const { user, isLoggedIn } = useSelector((state) => state.user);
-  console.log(isLoggedIn)
+  const dispatch = useDispatch();
   const location = useLocation();
   const navigate = useNavigate();
 
-
-  // useEffect(() => {
-  //   // Check for logout
-  //   if (Object.keys(user).length === 0 && location.pathname !== '/login' && location.pathname !== '/register') {
-  //     navigate('/');
-  //   }
-  // }, [user, location.pathname, navigate]);
-
   useEffect(() => {
     // Check for login timeout
-
     if (!isLoggedIn && location.pathname !== '/login' && location.pathname !== '/register') {
       const timer = setTimeout(() => {
         navigate('/login');
@@ -31,10 +23,18 @@ function App() {
     }
   }, [isLoggedIn, location.pathname, navigate]);
 
+  useEffect(() => {
+    // Check for logout
+    if (!user && isLoggedIn) {
+      dispatch(logout()); // Dispatch the logout action to update the isLoggedIn state
+      navigate('/login');
+    }
+  }, [user, isLoggedIn, navigate, dispatch]);
+
   return (
     <div className="App">
       <Routes>
-        <Route path="/" element={<Pages />} />
+        {isLoggedIn === false && <Route path="/" element={<Pages />} />}
         <Route path="/" element={isLoggedIn ? <Pages /> : <Login />} />
         {!isLoggedIn && <Route path="/login" element={<Login />} />}
         <Route path="/register" element={<Register />} />
