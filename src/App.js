@@ -4,24 +4,26 @@ import Register from './components/atoms/Register/Register';
 import Login from './components/atoms/Login/Login';
 import { Pages } from './components/Pages/Pages';
 import { useSelector, useDispatch } from 'react-redux';
+import { useLocation } from 'react-router-dom';
 
 function App() {
   const { user, isLoggedIn } = useSelector((state) => state.user);
-  const dispatch = useDispatch()
+  const location = useLocation();
   console.log(isLoggedIn)
   const navigate = useNavigate();
 
   useEffect(() => {
+
     // logout quickely
-    if (Object.keys(user).length === 0) {
+    if (Object.keys(user).length === 0 && location.pathname !== "/register") {
       navigate('/login');
     }
+
     //check for login 
     if (!isLoggedIn) {
       const timer = setTimeout(() => {
         navigate('/login');
       }, 60000);
-
       return () => clearTimeout(timer);
     }
   }, [navigate, isLoggedIn]);

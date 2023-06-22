@@ -17,7 +17,9 @@
   height: 3rem;
   background-color: #3b71ca;
   color: white;
+  text-align: center;
 }
+
 .container {
   background-attachment: fixed;
   background-repeat: no-repeat;

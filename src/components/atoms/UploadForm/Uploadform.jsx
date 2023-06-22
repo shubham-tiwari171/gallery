@@ -6,6 +6,7 @@ import { Dialog, DialogTitle } from "@mui/material";
 import Title from "../Title/Title";
 import "./Uploadform.css";
 import Header from "../Header/Header";
+import { useSelector } from "react-redux";
 const UploadForm = () => {
   const [randomDivisions, setRandomDivisions] = useState([]);
   const [randomImages, setRandomImages] = useState([]);
@@ -13,7 +14,8 @@ const UploadForm = () => {
   const [imagesPerPage] = useState(15);
   const [open, setOpen] = useState(false);
   const [selectedImage, setSelectedImage] = useState(null);
-
+  const { isLoggedIn } = useSelector((state) => state.user);
+  console.log(isLoggedIn);
   useEffect(() => {
     let interval = setTimeout(() => {
       getImage();
