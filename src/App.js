@@ -14,7 +14,7 @@ function App() {
   const navigate = useNavigate();
 
   useEffect(() => {
-    // Check for login timeout
+
     if (!isLoggedIn && location.pathname !== '/login' && location.pathname !== '/register') {
       const timer = setTimeout(() => {
         navigate('/login');
@@ -22,14 +22,6 @@ function App() {
       return () => clearTimeout(timer);
     }
   }, [isLoggedIn, location.pathname, navigate]);
-
-  useEffect(() => {
-    // Check for logout
-    if (!user && isLoggedIn) {
-      dispatch(logout()); // Dispatch the logout action to update the isLoggedIn state
-      navigate('/login');
-    }
-  }, [user, isLoggedIn, navigate, dispatch]);
 
   return (
     <div className="App">

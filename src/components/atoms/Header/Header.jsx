@@ -6,11 +6,13 @@ import { updatUserProfile } from "../../../api/apiEndpoint";
 import { useSelector, useDispatch } from "react-redux";
 import { setUser, logout } from "../../../redux/reducers/reducers";
 import { getUser } from "../../../api/apiEndpoint";
+import { useNavigate } from "react-router-dom";
 
 const Header = () => {
   const [profile, setProfile] = useState({});
   const dispatch = useDispatch();
   const { user } = useSelector((state) => state.user);
+  const navigate = useNavigate();
 
   useEffect(() => {
     const fetchUserProfile = async () => {
@@ -31,6 +33,7 @@ const Header = () => {
 
   const handleLogoutClick = () => {
     dispatch(logout());
+    navigate("/login");
   };
 
   const handleSelectProfileImageClick = async (e) => {
