@@ -18,7 +18,7 @@ function App() {
     if (!isLoggedIn && location.pathname !== '/login' && location.pathname !== '/register') {
       const timer = setTimeout(() => {
         navigate('/login');
-      }, 60000);
+      }, 40000);
       return () => clearTimeout(timer);
     }
   }, [isLoggedIn, location.pathname, navigate]);
