@@ -45,7 +45,9 @@ const Header = () => {
         ...user,
         profileImage: URL.createObjectURL(pic),
       };
+
       dispatch(setUser(updateUserProfile));
+
       try {
         const response = await updatUserProfile(user.id, updateUserProfile);
         console.log(response.data);
