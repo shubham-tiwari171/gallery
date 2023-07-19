@@ -1,85 +1,99 @@
 import React, { useEffect, useState } from "react";
-import Pagination from "@mui/material/Pagination";
-import { MdOutlineDownloading } from "react-icons/md";
 import axios from "axios";
-import { Dialog, DialogTitle } from "@mui/material";
-import Title from "../Title/Title";
-import "./Uploadform.css";
-import Header from "../Header/Header";
+import "./UploadForm.css";
 import { useSelector } from "react-redux";
+import { LuDownload } from "react-icons/lu";
+import Imagedialog from "../ImageDialog/Imagedialog";
+import Loading from "../Loading/Loading";
+import { getAllImages, getSearchedImages } from "../../../api/apiEndpoint";
+import PersonalGallery from "../PersonalGallery/PersonalGallery";
+// import styles from "./UploadForm.module.css";
+
 const UploadForm = () => {
-  const [randomDivisions, setRandomDivisions] = useState([]);
+  const { searchedText } = useSelector(
+    (state) => state.imageSearchSliceReducer
+  );
   const [randomImages, setRandomImages] = useState([]);
-  const [currentPage, setCurrentPage] = useState(1);
-  const [imagesPerPage] = useState(15);
+  const [previousSearchResult, setPreviousSearchResult] = useState([]);
+  const [imagesPerPage, setImagesPerPage] = useState(10);
+  const [pageNo, setPageNo] = useState(1);
   const [open, setOpen] = useState(false);
-  const [selectedImage, setSelectedImage] = useState(null);
-  const { isLoggedIn } = useSelector((state) => state.user);
-  console.log(isLoggedIn);
+  const [selectedImage, setSelectedImage] = useState("");
+  const [initialLoadings, setInitialLoadings] = useState(true);
+  const [isLoading, setIsLoading] = useState(false);
+  const [totalPageCount, setTotalPageCount] = useState(0);
+  const [count, setCount] = useState(0);
+  const [openSaveDialog, setOpenSaveDialog] = useState(false);
   useEffect(() => {
-    let interval = setTimeout(() => {
-      getImage();
-    }, 1000);
-    return () => clearInterval(interval);
+    getImage();
+  }, [pageNo, searchedText]);
+
+  useEffect(() => {
+    window.addEventListener("scroll", handleInfiniteScroll);
+    return () => {
+      window.removeEventListener("scroll", handleInfiniteScroll);
+    };
   }, []);
-
-  //changing the size if dive on page changes
-
-  useEffect(() => {
-    let interval = setTimeout(() => {
-      changeSize();
-    }, 1000);
-    return () => clearInterval(interval);
-  }, [currentPage, randomImages]);
-
-  // changing the size if dive on per page
-
-  useEffect(() => {
-    let interval = setTimeout(() => {
-      changeSize();
-    }, 5000);
-    return () => clearInterval(interval);
-  });
-
-  function handleChangePage(event, page) {
-    setCurrentPage(page);
-  }
 
   const getImage = async () => {
     try {
-      const response = await axios.get("https://pixico.onrender.com/images");
-      setRandomImages(response.data);
+      let response;
+      if (searchedText === "") {
+        console.log(randomImages.length);
+
+        if (pageNo === 1 || (pageNo > 1 && count === 0)) {
+          setIsLoading(true);
+          setPreviousSearchResult([]);
+          setRandomImages([]);
+          setCount((prev) => prev + 1);
+        }
+
+        if (pageNo > 1 && count === 0) {
+          setRandomImages([]);
+          setCount((prev) => prev + 1);
+        }
+
+        response = await getAllImages(pageNo, imagesPerPage);
+        setRandomImages((prev) => [...prev, ...response.data]);
+        setTotalPageCount(Number(response.headers["x-total-count"]));
+      } else {
+        try {
+          if (pageNo === 1 || randomImages) {
+            setRandomImages([]);
+          }
+          response = await getSearchedImages(
+            pageNo,
+            imagesPerPage,
+            searchedText
+          );
+          setRandomImages((prev) => [...prev, ...response]);
+          setPreviousSearchResult(response);
+        } catch (e) {
+          alert("Invalid response:", response);
+        }
+      }
+      // setRandomImages((prev) => [...prev, ...response.data]);
+      setInitialLoadings(false);
+      setIsLoading(false);
     } catch (error) {
-      console.error("Error fetching random images:", error);
+      console.error("Error fetching images:", error);
     }
   };
 
-  const changeSize = () => {
-    const paginatedImages = paginateImages(currentPage);
-    const divs = paginatedImages.map((image) => {
-      const height = Math.floor(Math.random() * (500 - 400 + 1)) + 300 + "px";
-      const width = Math.floor(Math.random() * (500 - 400 + 1)) + 300 + "px";
-      const divStyle = {
-        height,
-        width,
-      };
-      return (
-        <div key={image.id} style={divStyle} className="box">
-          <div className="image-container">
-            <img
-              src={image.urls.regular}
-              alt={image.alt_description}
-              className="image"
-              onClick={() => handleOpenDialog(image)}
-            />
-          </div>
-        </div>
-      );
-    });
-    setRandomDivisions(divs);
+  const handleInfiniteScroll = () => {
+    if (
+      window.innerHeight + document.documentElement.scrollTop >=
+      document.documentElement.offsetHeight
+    ) {
+      setIsLoading(true);
+      setPageNo((prevPageNo) => prevPageNo + 1);
+    }
   };
 
-  const handleOpenDialog = (image) => {
+  const handleOpenDialog = (image, e) => {
+    if (e.target.classList.contains("save-button")) {
+      return;
+    }
     setSelectedImage(image);
     setOpen(true);
   };
@@ -88,104 +102,90 @@ const UploadForm = () => {
     setOpen(false);
   };
 
-  const paginateImages = (currentPage) => {
-    const startIndex = (currentPage - 1) * imagesPerPage;
-    const endIndex = startIndex + imagesPerPage;
-    return randomImages.slice(startIndex, endIndex);
+  const handeleOpenSaveDialog = (image, e) => {
+    console.log("SaveToBordCard");
+    setSelectedImage(image);
+    setOpenSaveDialog(true);
   };
 
-  const handleImageDownload = async () => {
-    if (selectedImage) {
-      try {
-        const response = await axios.get(selectedImage.urls.full, {
-          responseType: "blob", // Set the response type to 'blob'
-        });
-
-        // Create a temporary anchor element
-        const randomImageNumber =
-          Math.floor(Math.random() * (500 - 300 + 1)) + 300;
-        const link = document.createElement("a");
-        link.href = URL.createObjectURL(response.data);
-        console.log(response.description);
-        link.download =
-          selectedImage.description === null ||
-          selectedImage.description === undefined
-            ? "Image" + randomImageNumber + ".jpg"
-            : selectedImage.description + ".jpg";
-
-        // Simulate a click event to trigger the download
-        link.click();
-
-        // Clean up the temporary anchor element
-        URL.revokeObjectURL(link.href);
-      } catch (error) {
-        console.error("Error downloading image:", error);
-      }
-    }
+  const handeleCloseSaveDialog = () => {
+    setOpenSaveDialog(false);
   };
 
   return (
     <>
-      {/* <Title /> */}
-      <form>
-        {/* <label>
-          <input type="file" />
-          <span>+</span>
-        </label> */}
-        <div
-          className="d-flex justify-content-end mt-4"
-          style={{ marginRight: "4rem" }}
-        >
-          {/* <Pagination
-            count={Math.ceil(randomImages.length / imagesPerPage)}
-            page={currentPage}
-            onChange={handleChangePage}
-            variant="outlined"
-            shape="rounded"
-            color="secondary"
-            style={{
-              color: "#fff",
-              backgroundColor: "white",
-              marginTop: "1rem",
-            }}
-          /> */}
-        </div>
-
-        <div className="output">{randomDivisions}</div>
-
-        {isLoggedIn && (
-          <div
-            className="d-flex justify-content-end mt-2"
-            style={{ marginRight: "4rem" }}
-          >
-            <Pagination
-              count={Math.ceil(randomImages.length / imagesPerPage)}
-              page={currentPage}
-              onChange={handleChangePage}
-              variant="outlined"
-              shape="rounded"
-              color="primary"
-            />
-          </div>
-        )}
-        <Dialog open={open} onClose={handleCloseDialog}>
-          {/* <DialogTitle>Image Dialog</DialogTitle> */}
-          <div className="dialog-image-container">
-            <MdOutlineDownloading
-              className={"md-outline-downloading"}
-              size={40}
-              onClick={handleImageDownload}
-            />
-            {selectedImage && (
+      {initialLoadings && randomImages.length === 0 ? (
+        <Loading />
+      ) : (
+        <div className="output">
+          {randomImages.map((image, index) => (
+            <div
+              key={image.id}
+              className={`card ${
+                index % 3 === 0
+                  ? " card_small"
+                  : index % 3 === 1
+                  ? " card_medium"
+                  : " card_large"
+              }`}
+            >
               <img
-                src={selectedImage.urls.full}
-                alt={selectedImage.alt_description}
-                className="dialog-image-container"
+                src={image.urls.regular}
+                alt={image.alt_description}
+                className={"image"}
               />
-            )}
-          </div>
-        </Dialog>
-      </form>
+              <div
+                className={"overlay"}
+                onClick={(e) => handleOpenDialog(image, e)}
+              >
+                <div className={"overlay-content"}>
+                  <div>
+                    <button
+                      className={"save-button"}
+                      onClick={(e) => handeleOpenSaveDialog(image, e)}
+                    >
+                      Save
+                    </button>
+                  </div>
+                  <div
+                    className={"LuDownload"}
+                    onClick={(e) => handleOpenDialog(image, e)}
+                  >
+                    <LuDownload size={30} />{" "}
+                  </div>
+                </div>
+              </div>
+            </div>
+          ))}
+        </div>
+      )}
+
+      {selectedImage !== "" && (
+        <Imagedialog
+          open={open}
+          selectedImage={selectedImage}
+          handleCloseDialog={handleCloseDialog}
+          setOpen={setOpen}
+        />
+      )}
+
+      <PersonalGallery
+        open={openSaveDialog}
+        handleCloseDialog={handeleCloseSaveDialog}
+        setOpenSaveDialog={setOpenSaveDialog}
+      />
+
+      {isLoading && randomImages.length !== Number(totalPageCount) && (
+        <div className={`${styles["bottom-loading"]}`}>
+          <Loading top={5} />
+        </div>
+      )}
+
+      {!initialLoadings && randomImages.length === Number(totalPageCount) && (
+        <div className={"bottom-loading no-data-found"}>
+          <p>No data found</p>
+        </div>
+      )}
     </>
   );
 };

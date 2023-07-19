@@ -1,9 +1,13 @@
 import { configureStore } from "@reduxjs/toolkit";
-import userSlice from "../reducers/reducers";
+import {
+  userSliceReducer,
+  imageSearchSliceReducer,
+} from "../reducers/reducers";
 import { setUser } from "../reducers/reducers";
 export const store = configureStore({
   reducer: {
-    user: userSlice,
+    user: userSliceReducer,
+    imageSearchSliceReducer: imageSearchSliceReducer,
   },
 });
 

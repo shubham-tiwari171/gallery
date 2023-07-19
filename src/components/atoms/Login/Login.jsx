@@ -11,6 +11,7 @@ import { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { setUser, login } from "../../../redux/reducers/reducers";
 import { useDispatch } from "react-redux";
+
 const Login = () => {
   const [openSnackbar, setOpenSnackbar] = useState({
     open: false,
@@ -31,10 +32,6 @@ const Login = () => {
     validationSchema: signUpSignInSchema,
   });
 
-  const containerStyle = {
-    backgroundImage: `url("./loading.gif")`,
-  };
-
   useEffect(() => {
     const fetchUsers = async () => {
       setIsLoading(true);
@@ -42,7 +39,6 @@ const Login = () => {
       setAllUsers(users);
       setIsLoading(false);
     };
-
     fetchUsers();
   }, []);
 

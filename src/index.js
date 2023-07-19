@@ -7,13 +7,19 @@ import reportWebVitals from './reportWebVitals';
 import { BrowserRouter } from 'react-router-dom';
 import { store } from "./redux/store/store"
 import { Provider } from 'react-redux';
+import { QueryClient, QueryClientProvider } from 'react-query';
 const root = ReactDOM.createRoot(document.getElementById('root'));
+
+const queryClient = new QueryClient();
+
 root.render(
 
   <BrowserRouter>
     <FirebaseProvider>
       <Provider store={store}>
-        <App />
+        <QueryClientProvider client={queryClient}>
+          <App />
+        </QueryClientProvider>,
       </Provider>
     </FirebaseProvider>
   </BrowserRouter >

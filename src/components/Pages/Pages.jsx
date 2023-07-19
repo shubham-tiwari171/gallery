@@ -4,8 +4,18 @@ import UploadForm from "../atoms/UploadForm/Uploadform";
 export const Pages = () => {
   return (
     <>
-      <Header />
-      <UploadForm />
+      <div className="page-content">
+        <section id="header" className="section">
+          <div className="section-content">
+            <Header />
+          </div>
+        </section>
+        <section id="header" className="section">
+          <div className="section-content">
+            <UploadForm />
+          </div>
+        </section>
+      </div>
     </>
   );
 };

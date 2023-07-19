@@ -5,7 +5,7 @@ import Login from './components/atoms/Login/Login';
 import { Pages } from './components/Pages/Pages';
 import { useSelector, useDispatch } from 'react-redux';
 import { useLocation } from 'react-router-dom';
-import { logout } from './redux/reducers/reducers';
+import Explore from './components/atoms/Explore/Explore';
 
 function App() {
   const { user, isLoggedIn } = useSelector((state) => state.user);
@@ -30,6 +30,7 @@ function App() {
         <Route path="/" element={isLoggedIn ? <Pages /> : <Login />} />
         {!isLoggedIn && <Route path="/login" element={<Login />} />}
         <Route path="/register" element={<Register />} />
+        {/* <Route path="/explore" element={<Explore />} /> */}
       </Routes>
     </div>
   );
