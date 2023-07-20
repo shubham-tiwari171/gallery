@@ -27,7 +27,7 @@ const PersonalGallery = ({ open, handleCloseDialog, setOpenSaveDialog }) => {
     >
       <DialogTitle>
         <div className={`${styles["dialog-heading"]}`}>
-          <h3 style={{ fontWeight: "bold" }}>Personal Gallery </h3>
+          <h3 style={{ fontWeight: "bold" }}>Personal Gallery</h3>
           <button className="btn btn-danger" onClick={handleCloseDialog}>
             <MdClose size={20} />
           </button>
@@ -47,23 +47,10 @@ const PersonalGallery = ({ open, handleCloseDialog, setOpenSaveDialog }) => {
               </div>
               <img src="https://helpx.adobe.com/content/dam/help/en/photoshop/using/convert-color-image-black-white/jcr_content/main-pars/before_and_after/image-before/Landscape-Color.jpg" />
             </div>
-
-            <div className={`${styles["text"]}`}></div>
-          </div>
-
-          <div className={`${styles["card"]}`}>
-            <div className={`${styles["img-container"]}`}>
-              <img src="https://helpx.adobe.com/content/dam/help/en/photoshop/using/convert-color-image-black-white/jcr_content/main-pars/before_and_after/image-before/Landscape-Color.jpg" />
-            </div>
-
             <div className={`${styles["text"]}`}></div>
           </div>
         </div>
       </DialogContent>
-      {/* <DialogActions>
-    <Button>Disagree</Button>
-    <Button>Agree</Button>
-  </DialogActions> */}
     </Dialog>
   );
 };

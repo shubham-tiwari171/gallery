@@ -6,7 +6,7 @@ import { Pages } from './components/Pages/Pages';
 import { useSelector, useDispatch } from 'react-redux';
 import { useLocation } from 'react-router-dom';
 import Explore from './components/atoms/Explore/Explore';
-
+import Header from './components/atoms/Header/Header';
 function App() {
   const { user, isLoggedIn } = useSelector((state) => state.user);
   const dispatch = useDispatch();
@@ -25,12 +25,13 @@ function App() {
 
   return (
     <div className="App">
+      {location.pathname !== '/login' && location.pathname !== '/register' && <Header />}
       <Routes>
         {isLoggedIn === false && <Route path="/" element={<Pages />} />}
         <Route path="/" element={isLoggedIn ? <Pages /> : <Login />} />
         {!isLoggedIn && <Route path="/login" element={<Login />} />}
         <Route path="/register" element={<Register />} />
-        {/* <Route path="/explore" element={<Explore />} /> */}
+        <Route path="/explore" element={<Explore />} />
       </Routes>
     </div>
   );

@@ -1,13 +1,12 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
-import "./UploadForm.css";
+import "./Uploadform.css";
 import { useSelector } from "react-redux";
 import { LuDownload } from "react-icons/lu";
 import Imagedialog from "../ImageDialog/Imagedialog";
 import Loading from "../Loading/Loading";
 import { getAllImages, getSearchedImages } from "../../../api/apiEndpoint";
 import PersonalGallery from "../PersonalGallery/PersonalGallery";
-// import styles from "./UploadForm.module.css";
 
 const UploadForm = () => {
   const { searchedText } = useSelector(
@@ -176,7 +175,7 @@ const UploadForm = () => {
       />
 
       {isLoading && randomImages.length !== Number(totalPageCount) && (
-        <div className={`${styles["bottom-loading"]}`}>
+        <div className={"bottom-loading"}>
           <Loading top={5} />
         </div>
       )}

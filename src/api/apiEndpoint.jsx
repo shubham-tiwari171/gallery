@@ -1,8 +1,8 @@
 import axios from "axios";
-
+const url = "https://pixico.onrender.com";
 export const createUser = async (user) => {
   try {
-    let result = await axios.post(" https://pixico.onrender.com/users", user);
+    let result = await axios.post("https://pixico.onrender.com/users", user);
     return result;
   } catch (e) {}
 };
@@ -50,5 +50,15 @@ export const updatUserProfile = async (id, user) => {
   try {
     let result = await axios.put(`https://pixico.onrender.com/${id}`, user);
     return result;
+  } catch (e) {}
+};
+
+export const updatUserPersonalBoard = async (id, updatedData) => {
+  try {
+    let result = await axios.put(
+      `https://pixico.onrender.com/users/${id}`,
+      updatedData
+    );
+    console.log(result);
   } catch (e) {}
 };
