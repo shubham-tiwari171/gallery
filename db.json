@@ -15494,7 +15494,6 @@
         }
       ]
     },
-
     {
       "id": "C3V88BOoRoM",
       "slug": "C3V88BOoRoM",
@@ -17332,7 +17331,6 @@
         }
       ]
     },
-
     {
       "id": "pp_oXEb2H48",
       "slug": "pp_oXEb2H48",
@@ -20275,7 +20273,12 @@
       "mobile": "8881946755",
       "gender": "female",
       "profileImage": "blob:http://localhost:3000/c85577ab-7d70-4894-bf7b-5f4fa00cd099",
-      "board": []
+      "board": [
+        {
+          "id": "66f77201-f566-4697-be53-2770d09d5c50",
+          "name": ""
+        }
+      ]
     }
   ]
 }
