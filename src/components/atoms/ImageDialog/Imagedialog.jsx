@@ -115,7 +115,7 @@ const Imagedialog = ({ open, selectedImage, handleCloseDialog, setOpen }) => {
                   <button
                     key={key}
                     className={`${styles["download-button"]}`}
-                    style={{ backgroundColor: data?.lightMuted }}
+                    style={{ backgroundColor: data?.lightVibrant }}
                     onClick={() => handleImageDownload(key)}
                   >
                     Download {key.charAt(0).toUpperCase() + key.slice(1)} Image

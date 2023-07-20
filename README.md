@@ -1,70 +1,55 @@
-# Getting Started with Create React App
+# Pixico - Your Source for High-Quality Images
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+Pixico is a popular online platform for free high-quality images. It offers a vast collection of visually stunning pictures. With its user-friendly interface, it provides easy access to a wide range of visually appealing images for personal or commercial use. Users can download images, upload images, and create their own separate board categories for images.
 
-## Available Scripts
+## Project Page
 
-In the project directory, you can run:
+Check out Pixico here: [Pixico Website](https://gallery-lac-five.vercel.app)
 
-### `npm start`
+## Tech Stack
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in your browser.
+- React.js
+- React Router DOM
+- Material-UI (MUI)
+- Emotion (for styling)
+- Axios (for handling API requests)
 
-The page will reload when you make changes.\
-You may also see any lint errors in the console.
+## npm install
 
-### `npm test`
+To start the application, run the following command in your terminal:
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+## npm start
 
-### `npm run build`
+The application will be hosted on http://localhost:3000/
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
+## Dependencies
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
+- "@emotion/react": "^11.11.1"
+- "@emotion/styled": "^11.11.0"
+- "@mui/material": "^5.13.5"
+- "@mui/system": "^5.13.2"
+- "axios": "^1.4.0"
+- "firebase": "^9.22.0"
+- "formik": "^2.4.2"
+- "json-server": "^0.17.3"
+- "jsonwebtoken": "^9.0.0"
+- "react": "^18.2.0"
+- "react-beautiful-dnd": "^13.1.1"
+- "react-bootstrap": "^2.7.4"
+- "react-dom": "^18.2.0"
+- "react-icons": "^4.9.0"
+- "react-palette": "^1.0.2"
+- "react-query": "^3.39.3"
+- "react-redux": "^8.1.0"
+- "react-router-dom": "^6.11.2"
+- "react-scripts": "5.0.1"
+- "uuid": "^9.0.0"
+- "yup": "^1.2.0"
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+## Dev Dependencies
 
-### `npm run eject`
+- "concurrently": "^8.1.0"
 
-**Note: this is a one-way operation. Once you `eject`, you can't go back!**
+## Collaborator
 
-If you aren't satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
-
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you're on your own.
-
-You don't have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn't feel obligated to use this feature. However we understand that this tool wouldn't be useful if you couldn't customize it when you are ready for it.
-
-## Learn More
-
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
-
-To learn React, check out the [React documentation](https://reactjs.org/).
-
-### Code Splitting
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/code-splitting](https://facebook.github.io/create-react-app/docs/code-splitting)
-
-### Analyzing the Bundle Size
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size](https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size)
-
-### Making a Progressive Web App
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app](https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app)
-
-### Advanced Configuration
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/advanced-configuration](https://facebook.github.io/create-react-app/docs/advanced-configuration)
-
-### Deployment
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/deployment](https://facebook.github.io/create-react-app/docs/deployment)
-
-### `npm run build` fails to minify
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
+- Shubham Tiwari

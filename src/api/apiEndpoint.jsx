@@ -41,14 +41,17 @@ export const getAllUser = async () => {
 
 export const getUser = async (id) => {
   try {
-    let result = await axios.get(`https://pixico.onrender.com/${id}`);
+    let result = await axios.get(`https://pixico.onrender.com/users/${id}`);
     return result.data;
   } catch (e) {}
 };
 
 export const updatUserProfile = async (id, user) => {
   try {
-    let result = await axios.put(`https://pixico.onrender.com/${id}`, user);
+    let result = await axios.put(
+      `https://pixico.onrender.com/users/${id}`,
+      user
+    );
     return result;
   } catch (e) {}
 };

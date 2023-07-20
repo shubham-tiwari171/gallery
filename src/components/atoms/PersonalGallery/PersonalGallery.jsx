@@ -11,8 +11,11 @@ import {
 } from "@mui/material";
 import axios from "axios";
 import { MdClose } from "react-icons/md";
-import { fontStyle } from "@mui/system";
-const PersonalGallery = ({ open, handleCloseDialog, setOpenSaveDialog }) => {
+import { useSelector, useDispatch } from "react-redux";
+
+const PersonalGallery = ({ open, handleCloseDialog }) => {
+  const { user } = useSelector((state) => state.user);
+  const dispatch = useDispatch();
   return (
     <Dialog
       open={open}
@@ -35,20 +38,22 @@ const PersonalGallery = ({ open, handleCloseDialog, setOpenSaveDialog }) => {
       </DialogTitle>
       <DialogContent>
         <div className={`${styles["dialog-content"]}`}>
-          <div className={`${styles["card"]}`}>
-            <div className={`${styles["img-container"]}`}>
-              <div className={`${styles["overlay"]}`}>
-                <input
-                  type="checkbox"
-                  name=""
-                  id=""
-                  className={`${styles["myInput"]}`}
-                />
+          {user.board.map((board) => (
+            <div className={`${styles["card"]}`}>
+              <div className={`${styles["img-container"]}`}>
+                <div className={`${styles["overlay"]}`}>
+                  <input
+                    type="checkbox"
+                    name=""
+                    id=""
+                    className={`${styles["myInput"]}`}
+                  />
+                </div>
+                <img src="https://helpx.adobe.com/content/dam/help/en/photoshop/using/convert-color-image-black-white/jcr_content/main-pars/before_and_after/image-before/Landscape-Color.jpg" />
               </div>
-              <img src="https://helpx.adobe.com/content/dam/help/en/photoshop/using/convert-color-image-black-white/jcr_content/main-pars/before_and_after/image-before/Landscape-Color.jpg" />
+              <div className={`${styles["text"]}`}> {board.name}</div>
             </div>
-            <div className={`${styles["text"]}`}></div>
-          </div>
+          ))}
         </div>
       </DialogContent>
     </Dialog>

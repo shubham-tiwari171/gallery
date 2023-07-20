@@ -58,6 +58,10 @@
 }
 
 .text {
+  overflow: hidden;
+  text-align: center;
+  font-weight: bold;
+  font-size: 1.4rem;
   margin: 1.25rem;
   display: flex;
   flex-direction: column;
@@ -75,14 +79,16 @@
   flex-direction: column;
   gap: 2rem;
 }
+
 .explore-card-name {
   height: 6rem;
   display: flex;
   justify-content: space-evenly;
   align-items: center;
   background-color: white;
-  box-shadow: 0px 10px 20px rgba(0, 0, 0, 0.1);
+  box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;
 }
+
 @media (max-width: 768px) {
   .explore-card-wrapper {
     flex-wrap: wrap;
