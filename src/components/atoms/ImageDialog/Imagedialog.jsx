@@ -11,9 +11,8 @@ import {
 } from "@mui/material";
 import axios from "axios";
 import { MdClose } from "react-icons/md";
-import { fontStyle } from "@mui/system";
 
-const Imagedialog = ({ open, selectedImage, handleCloseDialog, setOpen }) => {
+const Imagedialog = ({ open, selectedImage, handleCloseDialog }) => {
   const { data, loading, error } = usePalette(selectedImage?.urls?.raw);
   const [dimensions, setDimensions] = useState({});
 

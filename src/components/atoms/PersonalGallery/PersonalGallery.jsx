@@ -12,10 +12,17 @@ import {
 import axios from "axios";
 import { MdClose } from "react-icons/md";
 import { useSelector, useDispatch } from "react-redux";
-
-const PersonalGallery = ({ open, handleCloseDialog }) => {
+import { MdDelete } from "react-icons/md";
+import Imagebaord from "../ImageBoard/Imagebaord";
+import { padding } from "@mui/system";
+const PersonalGallery = ({ open, handleCloseDialog, selectedImage }) => {
   const { user } = useSelector((state) => state.user);
   const dispatch = useDispatch();
+
+  const handleInputClick = (e) => {
+    console.log(e.target.id);
+  };
+
   return (
     <Dialog
       open={open}
@@ -37,25 +44,36 @@ const PersonalGallery = ({ open, handleCloseDialog }) => {
         </div>
       </DialogTitle>
       <DialogContent>
-        <div className={`${styles["dialog-content"]}`}>
-          {user.board.map((board) => (
+        {/* <div className={`${styles["dialog-content"]}`}> */}
+        {/* {user.board.map((board) => (
             <div className={`${styles["card"]}`}>
               <div className={`${styles["img-container"]}`}>
                 <div className={`${styles["overlay"]}`}>
                   <input
                     type="checkbox"
-                    name=""
-                    id=""
+                    id={board.id}
                     className={`${styles["myInput"]}`}
+                    onClick={handleInputClick}
                   />
+                  <div className={` ${styles["myButton"]}`}>
+                    <MdDelete size={25} className={` ${styles["rotate"]}`} />
+                  </div>
                 </div>
                 <img src="https://helpx.adobe.com/content/dam/help/en/photoshop/using/convert-color-image-black-white/jcr_content/main-pars/before_and_after/image-before/Landscape-Color.jpg" />
               </div>
-              <div className={`${styles["text"]}`}> {board.name}</div>
+              <div className={`${styles["text"]}`}>{board.name}</div>
             </div>
-          ))}
-        </div>
+          ))} */}
+        <Imagebaord selectedImage={selectedImage} />
+        {/* </div> */}
       </DialogContent>
+      {/* <DialogActions
+        sx={{ ".MuiDialogActions-root": { padding: "16px 24px" } }}
+      >
+        <button className="btn btn-dark btn-lg" onClick={handleCloseDialog}>
+          Save Selected Image
+        </button>
+      </DialogActions> */}
     </Dialog>
   );
 };

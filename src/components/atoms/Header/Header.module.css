@@ -155,13 +155,29 @@ input[type="text"]:focus {
   border-radius: 50%;
 }
 
+.delete-palete {
+  padding: 0.8rem;
+  height: 8rem;
+  width: 15rem;
+  top: 10%;
+  left: 20.9%;
+  position: absolute;
+  display: flex;
+  justify-content: center;
+  flex-direction: column;
+  border-radius: 10px;
+  z-index: 4;
+  box-shadow: rgba(0, 0, 0, 0.16) 0px 3px 6px, rgba(0, 0, 0, 0.23) 0px 3px 6px;
+  background-color: #fff;
+  gap: 1rem;
+}
+
 @media (max-width: 768px) {
   .navbar {
     display: none;
   }
 
   .navbar-mobile {
-    margin-left: -0.5rem;
     position: fixed;
     top: 0;
     left: 0;
@@ -207,6 +223,7 @@ input[type="text"]:focus {
     cursor: pointer;
     position: relative;
   }
+
   .profile-menu-items > img {
     height: 2.5rem;
     width: 2.5rem;

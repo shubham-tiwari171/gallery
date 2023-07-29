@@ -1,5 +1,6 @@
 import axios from "axios";
 const url = "https://pixico.onrender.com";
+
 export const createUser = async (user) => {
   try {
     let result = await axios.post("https://pixico.onrender.com/users", user);
@@ -42,7 +43,7 @@ export const getAllUser = async () => {
 export const getUser = async (id) => {
   try {
     let result = await axios.get(`https://pixico.onrender.com/users/${id}`);
-    return result.data;
+    return result;
   } catch (e) {}
 };
 
@@ -62,6 +63,6 @@ export const updatUserPersonalBoard = async (id, updatedData) => {
       `https://pixico.onrender.com/users/${id}`,
       updatedData
     );
-    console.log(result);
+    return result;
   } catch (e) {}
 };

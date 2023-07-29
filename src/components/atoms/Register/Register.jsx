@@ -15,6 +15,22 @@ import MuiAlert from "@mui/material/Alert";
 import { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { Link } from "react-router-dom";
+import {
+  usersCollectionRef,
+  getUserByUserName,
+  getUserByEmail,
+  addUser,
+  updateUser,
+} from "../../../context/firebase";
+import {
+  collection,
+  getDocs,
+  getDoc,
+  doc,
+  addDoc,
+  query,
+  where,
+} from "firebase/firestore";
 const Register = () => {
   const [openSnackbar, setOpenSnackbar] = useState({
     open: false,
@@ -26,15 +42,33 @@ const Register = () => {
   const [allUsers, setAllUsers] = useState([]);
   const [createButtonDisabled, setCreateButtonDisabled] = useState(false);
   const nevigate = useNavigate();
+  // const usersCollectionRef = collection(db, "users");
+  // useEffect(() => {
+  //   const fetchUsers = async () => {
+  //     const users = await getAllUser();
+  //     setAllUsers(users);
+  //   };
 
-  useEffect(() => {
-    const fetchUsers = async () => {
-      const users = await getAllUser();
-      setAllUsers(users);
-    };
+  //   fetchUsers();
+  // }, []);
 
-    fetchUsers();
-  }, []);
+  // useEffect(() => {
+  //   const getAllUsers = async () => {
+  //     try {
+  //       const usersCollectionRef = collection(db, "users");
+  //       const usersSnapshot = await getDocs(usersCollectionRef);
+  //       usersSnapshot.forEach((doc) => {
+  //         // Each doc represents a document in the "users" collection
+  //         const userData = doc.data(); // Retrieve the data of the document
+  //         console.log(userData);
+  //       });
+  //       console.log(usersSnapshot.data());
+  //     } catch (error) {
+  //       console.error("Error fetching data:", error);
+  //     }
+  //   };
+  //   getAllUsers();
+  // }, []);
 
   const { values, errors, touched, handleBlur, handleChange, resetForm } =
     useFormik({
@@ -69,55 +103,122 @@ const Register = () => {
   const handleSubmit = async (event) => {
     // for preventing the form from reloading
     event.preventDefault();
-
+    // console.log(
+    //   "getUserByUserNameAndEmail():-",
+    //   await getUserByUserNameAndEmail(values.userName, values.email)
+    // );
     // creating user data
     let user = {
-      id: uuidv4(),
+      uid: uuidv4(),
       ...values,
       profileImage: "./male_avatar.png",
-      board: [],
+      boards: [],
     };
-
+    let userName = await getUserByUserName(values.userName);
+    let userEmail = await getUserByEmail(values.userName);
     // checking if the user already exists
-    let isUserExist = allUsers.find(
-      (existedUser) =>
-        existedUser.userName === user.userName ||
-        existedUser.email === user.email
-    );
+    // let isUserExist = allUsers.find(
+    //   (existedUser) =>
+    //     existedUser.userName === user.userName ||
+    //     existedUser.email === user.email
+    // );
+    // console.log(user);
+    // const usersCollectionRef = collection(db, "users");
 
-    // giving message that user already exists in the snackbar
-    if (isUserExist) {
-      setOpenSnackbar((prevState) => ({
-        ...prevState,
-        open: true,
-        severity: "warning",
-      }));
-      setSnackbarMessage(
-        "User with the same username and email already exists."
-      );
-      return;
+    // const userNameQuery = query(
+    //   usersCollectionRef,
+    //   where("userName", "==", values.userName)
+    // );
+    // const userNameQuerySnapshot = await getDocs(userNameQuery);
+
+    // // Check if a user with the same email exists
+    // const emailQuery = query(
+    //   usersCollectionRef,
+    //   where("email", "==", values.email)
+    // );
+    try {
+      // const emailQuerySnapshot = await getDocs(emailQuery);
+
+      if (!userName.empty || !userEmail.empty) {
+        setOpenSnackbar((prevState) => ({
+          ...prevState,
+          open: true,
+          severity: "warning",
+        }));
+        setSnackbarMessage(
+          "User with the same username or email already exists."
+        );
+        return;
+      }
+    } catch (error) {
+      console.error("Error fetching user data:", error);
+      // Handle any errors that occurred during fetching
     }
 
-    // all validation done then creating the user and saving it to the database and displaying a success message
-    let res = await createUser(user);
+    // giving message that user already exists in the snackbar
+    // if (isUserExist) {
+    //   setOpenSnackbar((prevState) => ({
+    //     ...prevState,
+    //     open: true,
+    //     severity: "warning",
+    //   }));
+    //   setSnackbarMessage(
+    //     "User with the same username and email already exists."
+    //   );
+    //   return;
+    // }
 
-    if (res.status === 201 && user) {
+    // all validation done then creating the user and saving it to the database and displaying a success message
+
+    // if (res.status === 201 && user) {
+    //   setOpenSnackbar((prevState) => ({
+    //     ...prevState,
+    //     open: true,
+    //     severity: "success",
+    //   }));
+    //   setSnackbarMessage("User registered successfully!");
+    //   resetForm();
+    //   setTimeout(() => {
+    //     nevigate("/login");
+    //   }, 2000);
+    // } else {
+    //   setOpenSnackbar((prevState) => ({
+    //     ...prevState,
+    //     open: true,
+    //     severity: "danger",
+    //   }));
+    //   setSnackbarMessage("An error occurred during user registration.");
+    // }
+
+    try {
+      const docRef = await addUser(user);
+
+      user = { ...user, documentId: docRef.id };
+      // If the document is successfully added, the docRef contains a reference to the newly created document.
+      console.log("Document added with ID: ", docRef.id);
+      await updateUser(docRef.id, user);
+
       setOpenSnackbar((prevState) => ({
         ...prevState,
         open: true,
         severity: "success",
       }));
+
       setSnackbarMessage("User registered successfully!");
+
       resetForm();
       setTimeout(() => {
         nevigate("/login");
       }, 2000);
-    } else {
+    } catch (error) {
+      console.error("Error adding document: ", error);
+
       setOpenSnackbar((prevState) => ({
         ...prevState,
         open: true,
-        severity: "danger",
+        severity: "error",
       }));
+
       setSnackbarMessage("An error occurred during user registration.");
     }
   };

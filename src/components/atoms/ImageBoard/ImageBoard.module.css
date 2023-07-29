@@ -1,0 +1,224 @@
+.image-board-card-wrapper {
+  padding: 1rem;
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(20rem, 1fr));
+  gap: 2rem;
+}
+
+.image-board-card {
+  width: 20rem;
+  height: 20rem;
+  background: white;
+  border-radius: 2rem;
+  box-shadow: 15px 15px 30px #bebebe, -15px -15px 30px #ffffff;
+  transition: 0.2s ease-in-out;
+}
+
+.image-board-img-container {
+  position: relative;
+  width: 100%;
+  height: 80%;
+  border-top-left-radius: 2rem;
+  border-top-right-radius: 2rem;
+  background: linear-gradient(#e66465, #9198e5);
+  display: flex;
+  align-items: flex-start;
+  justify-content: flex-end;
+  overflow: hidden;
+}
+
+.myInput {
+  position: absolute;
+  height: 1.5rem;
+  width: 1.5rem;
+  top: 10%;
+  left: 85%;
+  cursor: pointer;
+}
+
+/* .myButton {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 2.5rem;
+  width: 2.5rem;
+  border-radius: 50%;
+  position: absolute;
+  top: 7%;
+  left: 5%;
+  color: white;
+  cursor: pointer;
+  background-color: rgb(54, 52, 52);
+}
+
+.myButton:hover {
+  transition: 0.25s ease;
+  background-color: black;
+} */
+
+.rotate {
+  height: 1.3rem;
+  width: 1.3rem;
+}
+
+.rotate:hover {
+  transition: 0.25s ease-in-out;
+  transform: rotate(20deg);
+}
+
+.image-board-img-container img {
+  height: 100%;
+  width: 100%;
+  object-fit: cover;
+}
+
+.text {
+  overflow: hidden;
+  text-align: justify;
+  font-weight: bold;
+  font-size: 1rem;
+  margin: 1.25rem;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.edit-board-name-text-field {
+  height: 20%;
+  display: flex;
+  align-items: center;
+  justify-content: space-evenly;
+  border-bottom-left-radius: 2rem;
+  border-bottom-right-radius: 2rem;
+}
+
+.image-board:hover {
+  cursor: pointer;
+  box-shadow: 0px 10px 20px rgba(0, 0, 0, 0.1);
+}
+
+.image-board-create-button {
+  display: flex;
+  justify-content: start;
+  flex-direction: column;
+  gap: 2rem;
+}
+
+.image-board-card-name {
+  height: 8rem;
+  display: flex;
+  flex-direction: column;
+  background-color: white;
+  box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;
+  gap: 1rem;
+}
+
+.image-board-card-name-inner {
+  display: flex;
+  justify-content: space-evenly;
+  align-items: center;
+}
+
+.image-board-card-name-heading {
+  cursor: pointer;
+  display: flex;
+  justify-content: end;
+}
+
+.image-board-card-name-inner-text-field {
+  width: 60%;
+}
+
+.moreIconGrow {
+  height: 2.5rem;
+  width: 2.5rem;
+  color: white;
+  top: 6%;
+  left: 7%;
+  position: absolute;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border-radius: 2rem;
+  cursor: pointer;
+  background-color: black;
+  transition: 0.3s ease-in-out;
+}
+
+.moreIconGrow:hover {
+  gap: 1.3rem;
+  width: 15.5rem;
+  /* transition: all 0.3s ease-in-out; */
+  z-index: 2; /* Increase z-index on hover to keep the expanded icons above the rest */
+}
+
+.hidden {
+  display: none;
+}
+
+.mdIcon:hover {
+  /* width: 2rem;
+  height: 2rem; */
+  display: flex;
+  justify-content: center;
+  border-radius: 50%;
+  align-items: center;
+  /* background-color: #e66465; */
+  transform: scale(1.4);
+  transition: transform 0.25s ease-in-out;
+}
+
+@media screen and (max-width: 768px) {
+}
+
+@media (max-width: 1024px) {
+  .image-board-card-wrapper {
+    display: flex;
+    justify-content: center;
+
+    flex-wrap: wrap;
+  }
+
+  .image-board-card {
+    width: 100%;
+    max-width: 20rem;
+  }
+
+  .image-board-card-name-inner-text-field {
+    width: 60%;
+  }
+
+  .text {
+    font-size: 1rem;
+  }
+
+  .image-board-create-button {
+    width: 100%;
+  }
+
+  .myInput {
+    height: 1.2rem;
+    width: 1.2rem;
+  }
+}
+
+@media (min-width: 1024px) {
+  .image-board-card-wrapper {
+    display: flex;
+    grid-template-columns: repeat(auto-fill, minmax(20rem, 1fr));
+    flex-wrap: wrap;
+  }
+
+  .image-board-card {
+    width: 100%;
+    max-width: 20rem;
+  }
+
+  .image-board-card-name-inner-text-field {
+    width: 60%;
+  }
+
+  .text {
+    font-size: 1.1345rem;
+  }
+}

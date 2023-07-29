@@ -1,5 +1,4 @@
 import React, { useEffect, useState } from "react";
-import axios from "axios";
 import "./Uploadform.css";
 import { useSelector } from "react-redux";
 import { LuDownload } from "react-icons/lu";
@@ -38,8 +37,6 @@ const UploadForm = () => {
     try {
       let response;
       if (searchedText === "") {
-        console.log(randomImages.length);
-
         if (pageNo === 1 || (pageNo > 1 && count === 0)) {
           setIsLoading(true);
           setPreviousSearchResult([]);
@@ -102,7 +99,7 @@ const UploadForm = () => {
   };
 
   const handeleOpenSaveDialog = (image, e) => {
-    console.log("SaveToBordCard");
+    // console.log("SaveToBordCard");
     setSelectedImage(image);
     setOpenSaveDialog(true);
   };
@@ -140,7 +137,7 @@ const UploadForm = () => {
                 <div className={"overlay-content"}>
                   <div>
                     <button
-                      className={"save-button"}
+                      className={"save-button btn btn-danger"}
                       onClick={(e) => handeleOpenSaveDialog(image, e)}
                     >
                       Save
@@ -172,6 +169,7 @@ const UploadForm = () => {
         open={openSaveDialog}
         handleCloseDialog={handeleCloseSaveDialog}
         setOpenSaveDialog={setOpenSaveDialog}
+        selectedImage={selectedImage}
       />
 
       {isLoading && randomImages.length !== Number(totalPageCount) && (

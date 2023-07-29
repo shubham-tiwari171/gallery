@@ -12,6 +12,7 @@ import { useNavigate } from "react-router-dom";
 import { setUser, login } from "../../../redux/reducers/reducers";
 import { useDispatch } from "react-redux";
 
+import { getUserLoggedIn } from "../../../context/firebase";
 const Login = () => {
   const [openSnackbar, setOpenSnackbar] = useState({
     open: false,
@@ -24,6 +25,7 @@ const Login = () => {
   const [allUsers, setAllUsers] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
   const dispatch = useDispatch();
+
   const { values, errors, touched, handleBlur, handleChange } = useFormik({
     initialValues: {
       email: "",
@@ -32,15 +34,15 @@ const Login = () => {
     validationSchema: signUpSignInSchema,
   });
 
-  useEffect(() => {
-    const fetchUsers = async () => {
-      setIsLoading(true);
-      const users = await getAllUser();
-      setAllUsers(users);
-      setIsLoading(false);
-    };
-    fetchUsers();
-  }, []);
+  // useEffect(() => {
+  //   const fetchUsers = async () => {
+  //     setIsLoading(true);
+  //     const users = await getAllUser();
+  //     setAllUsers(users);
+  //     setIsLoading(false);
+  //   };
+  //   fetchUsers();
+  // }, []);
 
   const handleSnackbarClose = () => {
     setOpenSnackbar((prevState) => ({
@@ -50,28 +52,31 @@ const Login = () => {
     setSnackbarMessage("");
   };
 
-  const handleSubmit = (event) => {
+  const handleSubmit = async (event) => {
     event.preventDefault();
+    let user = await getUserLoggedIn(values.email, values.password);
+    console.log(user);
     let isUserExist = allUsers.find(
       (existedUser) =>
         existedUser.email === values.email &&
         existedUser.password === values.password
     );
-
-    if (isUserExist) {
-      setOpenSnackbar((prevState) => ({
-        ...prevState,
-        open: true,
-        severity: "success",
-      }));
-      setSnackbarMessage("Login successful!");
-      setIsLoading(true);
-      setTimeout(() => {
-        dispatch(login());
-        dispatch(setUser(isUserExist));
-        navigate("/");
-      }, 5000);
-    } else {
+    try {
+      if (user.email === values.email && user.password === values.password) {
+        setOpenSnackbar((prevState) => ({
+          ...prevState,
+          open: true,
+          severity: "success",
+        }));
+        setSnackbarMessage("Login successful!");
+        setIsLoading(true);
+        setTimeout(() => {
+          dispatch(login());
+          dispatch(setUser(user));
+          navigate("/");
+        }, 2000);
+      }
+    } catch (err) {
       setOpenSnackbar((prevState) => ({
         ...prevState,
         open: true,

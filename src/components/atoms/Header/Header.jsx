@@ -1,37 +1,101 @@
 import React, { useState, useEffect } from "react";
 import styles from "./Header.module.css";
 import axios from "axios";
-import { MdHome, MdExplore, MdLogout, MdLogin } from "react-icons/md";
+import { MdHome, MdExplore, MdLogout, MdLogin, MdDelete } from "react-icons/md";
 import { RxPlus } from "react-icons/rx";
 import { updatUserProfile } from "../../../api/apiEndpoint";
 import { useSelector, useDispatch } from "react-redux";
 import { setUser, logout } from "../../../redux/reducers/reducers";
 import { getUser } from "../../../api/apiEndpoint";
-import { useNavigate } from "react-router-dom";
-import { search } from "../../../redux/reducers/reducers";
+import { useNavigate, useLocation } from "react-router-dom";
+import { search, deleteSelectedImage } from "../../../redux/reducers/reducers";
 import { getSearchedImages } from "../../../api/apiEndpoint";
+import { border } from "@mui/system";
+import Button from "@mui/material/Button";
+import Dialog from "@mui/material/Dialog";
+import DialogActions from "@mui/material/DialogActions";
+import DialogContent from "@mui/material/DialogContent";
+import DialogContentText from "@mui/material/DialogContentText";
+import DialogTitle from "@mui/material/DialogTitle";
+import {
+  updateUser,
+  uplaodProfileImage,
+  isProfileImageExist,
+} from "../../../context/firebase";
+
 const Header = () => {
+  const [open, setOpen] = useState(false);
   const [profile, setProfile] = useState({});
+  const [fileUpload, setFileUpload] = useState(null);
   const [searchText, setSearchText] = useState("");
+  const [hideDeletePallete, sethideDeletePallete] = useState("");
   const dispatch = useDispatch();
-  const { user, isUser } = useSelector((state) => state.user);
+  const { user, isLoggedIn, selectedImageId } = useSelector(
+    (state) => state.user
+  );
   const navigate = useNavigate();
+  const location = useLocation();
+  const boardId =
+    location.pathname.split("/")[location.pathname.split("/").length - 1];
+
+  // useEffect(() => {
+  //   const fetchUserProfile = async () => {
+  //     try {
+  //       const result = await getUser(user?.id);
+  //       setProfile(result);
+  //     } catch (error) {
+  //       console.error("Error fetching user profile:", error);
+  //     }
+  //   };
+
+  //   fetchUserProfile();
+  // }, [user?.id]);
 
   useEffect(() => {
-    const fetchUserProfile = async () => {
-      try {
-        const result = await getUser(user.id);
-        setProfile(result);
-      } catch (error) {
-        console.error("Error fetching user profile:", error);
-      }
+    return () => {
+      sethideDeletePallete(false);
     };
+  }, [location.pathname]);
 
-    fetchUserProfile();
-  }, [user.id]);
+  const handleClick = () => {};
 
-  const handleClick = () => {
-    // Handle click logic
+  const handleClickOpen = () => {
+    setOpen(true);
+  };
+
+  const handleClose = (value) => {
+    if (value === "yes") {
+      setOpen(false);
+      sethideDeletePallete(false);
+
+      const filteredBoard = user?.boards?.find(
+        (board) => board?.id === boardId
+      );
+      const deletedImagesFromBoard = {
+        ...filteredBoard,
+        images: [],
+      };
+
+      const updatedBoards = user?.boards?.map((board) =>
+        board?.id === boardId ? deletedImagesFromBoard : board
+      );
+
+      const updatedUser = {
+        ...user,
+        boards: updatedBoards,
+      };
+
+      dispatch(setUser(updatedUser));
+      dispatch(deleteSelectedImage([]));
+      updateUser(user.documentId, updatedUser);
+    } else {
+      setOpen(false);
+      sethideDeletePallete(false);
+    }
+  };
+
+  const handleImageDelete = (e) => {
+    sethideDeletePallete(!hideDeletePallete);
   };
 
   const handleLogoutClick = () => {
@@ -39,23 +103,35 @@ const Header = () => {
     navigate("/login");
   };
 
+  const handleLogInClick = () => {
+    dispatch(logout());
+    navigate("/login");
+  };
+
   const handleSelectProfileImageClick = async (e) => {
-    let pic = e.target.files[0];
+    let profileImage = e.target.files[0];
 
-    if (pic) {
-      setProfile(URL.createObjectURL(pic));
-      let updateUserProfile = {
-        ...user,
-        profileImage: URL.createObjectURL(pic),
-      };
-
-      dispatch(setUser(updateUserProfile));
-
-      try {
-        const response = await updatUserProfile(user.id, updateUserProfile);
-        console.log(response.data);
-      } catch (error) {
-        console.error("Error updating user profile:", error);
+    if (profileImage) {
+      // setProfile(URL.createObjectURL(pic));
+      // let updateUserProfile = {
+      //   ...user,
+      //   profileImage: URL.createObjectURL(pic),
+      // };
+      // dispatch(setUser(updateUserProfile));
+      // try {
+      //   const response = await updatUserProfile(user.id, updateUserProfile);
+      //   console.log(response.data);
+      // } catch (error) {
+      //   console.error("Error updating user profile:", error);
+      // }
+      if (isProfileImageExist(profileImage.name)) {
+        const imageUrl = await uplaodProfileImage(
+          profileImage.name,
+          profileImage
+        );
+        const updatedUserProfile = { ...user, profileImage: imageUrl };
+        dispatch(setUser(updatedUserProfile));
+        await updateUser(updatedUserProfile);
       }
     }
   };
@@ -67,14 +143,68 @@ const Header = () => {
     dispatch(search(event.target.value));
   };
 
+  const handleRemoveSelectedImage = () => {
+    const filteredBoard = user?.boards?.find((board) => board?.id === boardId);
+    const deletedImagesFromBoard = {
+      ...filteredBoard,
+      images: filteredBoard?.images?.filter(
+        (image) => !selectedImageId.includes(image.id)
+      ),
+    };
+
+    const updatedBoards = user?.boards?.map((board) =>
+      board?.id === boardId ? deletedImagesFromBoard : board
+    );
+
+    const updatedUser = {
+      ...user,
+      boards: updatedBoards,
+    };
+
+    sethideDeletePallete(!hideDeletePallete);
+
+    dispatch(setUser(updatedUser));
+    dispatch(deleteSelectedImage([]));
+    updateUser(user.documentId, updatedUser);
+  };
+
+  const handleRemoveAllImage = () => {
+    handleClickOpen();
+  };
+
   return (
     <>
+      <Dialog
+        open={open}
+        onClose={handleClose}
+        aria-labelledby="alert-dialog-title"
+        aria-describedby="alert-dialog-description"
+      >
+        <DialogTitle id="alert-dialog-title">Confirmation Dialog</DialogTitle>
+        <DialogContent>
+          <DialogContentText id="alert-dialog-description">
+            Do you really want to delete all images ?.
+          </DialogContentText>
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={() => handleClose("no")} autoFocus>
+            Disagree
+          </Button>
+          <Button onClick={() => handleClose("yes")}>Agree</Button>
+        </DialogActions>
+      </Dialog>
+
       {/* Desktop view */}
       <div className={styles.navbar}>
         <div className={`${styles["menu-items"]} ${styles["icon-menu-items"]}`}>
           <img src="https://pngimg.com/d/pinterest_PNG62.png" alt="" />
         </div>
-        <div className={styles["menu-items"]}>Home</div>
+        <div
+          className={styles["menu-items"]}
+          onClick={() => navigate("/uploadform")}
+        >
+          Home
+        </div>
         <div
           className={styles["menu-items"]}
           onClick={() => navigate("/explore")}
@@ -84,6 +214,11 @@ const Header = () => {
         <div className={styles["menu-items"]} onClick={handleClick}>
           Create
         </div>
+        {location.pathname.includes("/savedImages") && (
+          <div className={styles["menu-items"]} onClick={handleImageDelete}>
+            Delete
+          </div>
+        )}
         <div
           className={`${styles["menu-items"]} ${styles["search-menu-items"]}`}
           style={{ flexGrow: "3" }}
@@ -96,9 +231,33 @@ const Header = () => {
             onChange={handleSerchedChange}
           />
         </div>
-        <div className={styles["menu-items"]} onClick={handleLogoutClick}>
-          Logout
-        </div>
+        {isLoggedIn ? (
+          <div
+            className={styles["navbar-mobile-menu-items"]}
+            onClick={handleLogoutClick}
+            title="Logout"
+            style={{
+              display: "flex",
+              width: "4rem",
+              justifyContent: "center",
+            }}
+          >
+            <MdLogout size={30} />
+          </div>
+        ) : (
+          <div
+            className={styles["navbar-mobile-menu-items"]}
+            onClick={handleLogoutClick}
+            title="Login"
+            style={{
+              display: "flex",
+              width: "4rem",
+              justifyContent: "center",
+            }}
+          >
+            <MdLogin size={30} />
+          </div>
+        )}
         <div
           className={`${styles["menu-items"]} ${styles["profile-menu-items"]}`}
         >
@@ -140,6 +299,15 @@ const Header = () => {
         >
           <RxPlus size={25} />
         </div>
+        {location.pathname.includes("/savedImages") && (
+          <div
+            className={styles["navbar-mobile-menu-items"]}
+            onClick={handleImageDelete}
+            title="Delete Image"
+          >
+            <MdDelete size={25} />
+          </div>
+        )}
         <div
           className={`${styles["navbar-mobile-menu-items"]} ${styles["search-menu-items"]}`}
           style={{ flexGrow: "1" }}
@@ -152,13 +320,23 @@ const Header = () => {
             onChange={handleSerchedChange}
           />
         </div>
-        <div
-          className={styles["navbar-mobile-menu-items"]}
-          onClick={handleLogoutClick}
-          title="Logout"
-        >
-          <MdLogout size={25} />
-        </div>
+        {isLoggedIn ? (
+          <div
+            className={styles["navbar-mobile-menu-items"]}
+            onClick={handleLogoutClick}
+            title="Logout"
+          >
+            <MdLogout size={25} />
+          </div>
+        ) : (
+          <div
+            className={styles["navbar-mobile-menu-items"]}
+            onClick={handleLogoutClick}
+            title="Logout"
+          >
+            <MdLogin size={25} />
+          </div>
+        )}
         <div
           className={`${styles["navbar-mobile-menu-items"]} ${styles["profile-menu-items"]}`}
           title="Profile"
@@ -176,6 +354,23 @@ const Header = () => {
           </label>
         </div>
       </div>
+
+      {hideDeletePallete && (
+        <div
+          className={`${styles["delete-palete"]}`}
+          onClick={handleImageDelete}
+        >
+          <button
+            className="btn btn-danger"
+            onClick={handleRemoveSelectedImage}
+          >
+            Remove Selected Image
+          </button>
+          <button className="btn btn-danger" onClick={handleRemoveAllImage}>
+            Remove All
+          </button>
+        </div>
+      )}
     </>
   );
 };

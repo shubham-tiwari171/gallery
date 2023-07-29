@@ -2,7 +2,7 @@ import React from 'react';
 import ReactDOM from 'react-dom/client';
 import './index.css';
 import App from './App';
-import { FirebaseProvider } from './context/firebase';
+
 import reportWebVitals from './reportWebVitals';
 import { BrowserRouter } from 'react-router-dom';
 import { store } from "./redux/store/store"
@@ -15,13 +15,12 @@ const queryClient = new QueryClient();
 root.render(
 
   <BrowserRouter>
-    <FirebaseProvider>
-      <Provider store={store}>
-        <QueryClientProvider client={queryClient}>
-          <App />
-        </QueryClientProvider>,
-      </Provider>
-    </FirebaseProvider>
+    <Provider store={store}>
+      <QueryClientProvider client={queryClient}>
+        <App />
+      </QueryClientProvider>,
+    </Provider>
+
   </BrowserRouter >
 );
 

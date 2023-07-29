@@ -4,6 +4,8 @@ const userSlice = createSlice({
   name: "user",
   initialState: {
     isLoggedIn: false,
+    deleteImages: {},
+    selectedImageId: [],
     user: {},
   },
   reducers: {
@@ -19,6 +21,10 @@ const userSlice = createSlice({
     logout: (state, action) => {
       state.isLoggedIn = false;
       state.user = {};
+    },
+
+    deleteSelectedImage: (state, action) => {
+      state.selectedImageId = action.payload;
     },
   },
 });
@@ -37,7 +43,8 @@ const imageSearchSlice = createSlice({
   },
 });
 
-export const { login, setUser, logout } = userSlice.actions;
+export const { login, setUser, logout, selectedImage, deleteSelectedImage } =
+  userSlice.actions;
 export const { search } = imageSearchSlice.actions;
 export const userSliceReducer = userSlice.reducer;
 export const imageSearchSliceReducer = imageSearchSlice.reducer;

@@ -31,12 +31,6 @@ body {
   display: none;
 }
 
-/* .image-container {
-  width: 100%;
-  height: 100%;
-  overflow-y: hidden;
-} */
-
 .image {
   border-radius: var(--card_border_radius);
   width: 100%;
@@ -75,7 +69,6 @@ body {
   width: 100%;
   height: 100%;
   opacity: 1;
-  z-index: 3;
   transition: opacity 1s ease-in-out;
 }
 
@@ -113,7 +106,6 @@ body {
   right: 1rem;
   height: 3.2rem;
   width: 6.5rem;
-  background-color: var(--button-colour);
   color: white;
   border-radius: 1.7rem;
   font-size: 1rem;
@@ -126,6 +118,7 @@ body {
   box-shadow: rgba(14, 30, 37, 0.12) 0px 2px 4px 0px,
     rgba(14, 30, 37, 0.32) 0px 2px 16px 0px;
 }
+
 .save-button:hover {
   box-shadow: rgba(0, 0, 0, 0.4) 0px 2px 4px,
     rgba(0, 0, 0, 0.3) 0px 7px 13px -3px, rgba(0, 0, 0, 0.2) 0px -3px 0px inset;
@@ -162,15 +155,29 @@ body {
   background-color: rgb(187, 226, 239);
 }
 
+/* Updated styles for small screens */
 @media (max-width: 768px) {
   .card:hover .overlay {
-    background-color: transparent;
+    box-shadow: transparent;
   }
 
-  .save-button {
-    display: none;
+  .overlay {
+    position: absolute;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
+    align-items: center;
+
+    border-radius: var(--card_border_radius);
+    width: 100%;
+    height: 100%;
+    opacity: 1;
   }
-  .LuDownload {
-    display: none;
+
+  .overlay-content {
+    display: flex;
+    margin: 0.5rem 0.5rem 1rem 0.5rem;
+    color: #fff;
+    font-size: 1rem;
   }
 }
