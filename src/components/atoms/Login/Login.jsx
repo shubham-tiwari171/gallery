@@ -6,13 +6,16 @@ import { signUpSignInSchema } from "../../../schemas";
 import { Link } from "react-router-dom";
 import Snackbar from "@mui/material/Snackbar";
 import MuiAlert from "@mui/material/Alert";
-import { getAllUser } from "../../../api/apiEndpoint";
-import { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { setUser, login } from "../../../redux/reducers/reducers";
 import { useDispatch } from "react-redux";
+import GoogleButton from "react-google-button";
+import {
+  signInWithGoogle,
+  signInSchema,
+  getUserLoggedIn,
+} from "../../../context/firebase";
 
-import { getUserLoggedIn } from "../../../context/firebase";
 const Login = () => {
   const [openSnackbar, setOpenSnackbar] = useState({
     open: false,
@@ -51,28 +54,42 @@ const Login = () => {
     }));
     setSnackbarMessage("");
   };
-
+ 
+ 
+ 
+  const handleVarifiedUser = () => { }
+  
   const handleSubmit = async (event) => {
     event.preventDefault();
-    let user = await getUserLoggedIn(values.email, values.password);
-    console.log(user);
-    let isUserExist = allUsers.find(
-      (existedUser) =>
-        existedUser.email === values.email &&
-        existedUser.password === values.password
-    );
+    //let token = signInSchema(values.email, values.password);
+    //let user = await getUserLoggedIn(values.email, values.password);
+    // console.log(user);
+    // let isUserExist = allUsers.find(
+    //   (existedUser) =>
+    //     existedUser.email === values.email &&
+    //     existedUser.password === values.password
+    // );
     try {
-      if (user.email === values.email && user.password === values.password) {
+      // if (user.email === values.email && user.password === values.password) {
+      let token = await signInSchema(values.email, values.password);
+      let user = await getUserLoggedIn(token.email);
+      console.log(user);
+      if (
+        token.accessToken !== null &&
+        token.accessToken !== undefined &&
+        token.accessToken !== ""
+      ) {
         setOpenSnackbar((prevState) => ({
           ...prevState,
           open: true,
           severity: "success",
         }));
-        setSnackbarMessage("Login successful!");
+        setSnackbarMessage("Login successfull!");
         setIsLoading(true);
         setTimeout(() => {
-          dispatch(login());
+          // dispatch(login());
           dispatch(setUser(user));
+          // setIsLoading(false);
           navigate("/");
         }, 2000);
       }
@@ -84,6 +101,40 @@ const Login = () => {
       }));
       setSnackbarMessage("Invalid email or password. Please try again.");
     }
+  };
+
+  const googleSignIn = () => {
+    try {
+      let googleProvidedAccessToken = signInWithGoogle();
+      if (
+        token.accessToken !== null &&
+        token.accessToken !== undefined &&
+        token.accessToken !== ""
+      ) {
+        setOpenSnackbar((prevState) => ({
+          ...prevState,
+          open: true,
+          severity: "success",
+        }));
+        setSnackbarMessage("Login successfull!");
+        setIsLoading(true);
+        setTimeout(() => {
+          // dispatch(login());
+          dispatch(setUser(user));
+          // setIsLoading(false);
+          navigate("/");
+        }, 2000);
+      }
+    } catch (err) {
+      setOpenSnackbar((prevState) => ({
+        ...prevState,
+        open: true,
+        severity: "error",
+      }));
+      setSnackbarMessage("Invalid email or password. Please try again.");
+    }
+      
+    } catch {}
   };
 
   return (
@@ -113,88 +164,82 @@ const Login = () => {
             <img src="./loading.gif" alt="Loading" className="loading-gif" />
           </div>
         ) : (
-          <section className="vh-100 gradient-custom">
-            <div className="container py-5 h-100">
-              <div className="row justify-content-center align-items-center h-100">
-                <div className="d-flex justify-content-center align-items-center">
-                  <div className="card shadow-2-strong card-registration">
-                    <div className="card-body" style={{ width: "450px" }}>
-                      <h2 className="mb-4">Login</h2>
-                      <form onSubmit={handleSubmit}>
-                        <div className="row">
-                          <div className="col">
-                            <div className="form-outline">
-                              <TextField
-                                error={
-                                  errors.email && touched.email ? true : false
-                                }
-                                label="Email"
-                                name="email"
-                                margin="normal"
-                                type=""
-                                required
-                                fullWidth
-                                value={values.email}
-                                onChange={handleChange}
-                                onBlur={handleBlur}
-                                helperText={
-                                  errors.email && touched.email
-                                    ? errors.email
-                                    : ""
-                                }
-                              />
-                            </div>
-                          </div>
-                        </div>
-
-                        <div className="row">
-                          <div className="col d-flex align-items-center">
-                            <div className="form-outline datepicker w-100">
-                              <TextField
-                                error={
-                                  errors.password && touched.password
-                                    ? true
-                                    : false
-                                }
-                                label="Password"
-                                name="password"
-                                margin="normal"
-                                type="password"
-                                required
-                                fullWidth
-                                value={values.password}
-                                onChange={handleChange}
-                                onBlur={handleBlur}
-                                helperText={
-                                  errors.password && touched.password
-                                    ? errors.password
-                                    : ""
-                                }
-                              />
-                            </div>
-                          </div>
-                        </div>
-
-                        <div className="mt-4 d-flex justify-content-around align-items-center">
-                          <p>
-                            Don't have an account?{" "}
-                            <Link to="/register">Sign up</Link>
-                          </p>
-                          <button
-                            className="btn btn-primary btn-lg"
-                            type="submit"
-                            style={{ marginTop: "-13px" }}
-                          >
-                            Login
-                          </button>
-                        </div>
-                      </form>
+          // <section className="vh-100 gradient-custom">
+          //<div className="container py-5 h-100">
+          //<div className="row justify-content-center align-items-center h-100">
+          //<div className="d-flex justify-content-center align-items-center">
+          <div className="card" style={{ width: "675px" }}>
+            <div className="card-body">
+              <h4 className="mb-4">Sign in to your account</h4>
+              <form onSubmit={handleSubmit}>
+                <div className="row">
+                  <div className="col">
+                    <div className="form-outline">
+                      <TextField
+                        error={errors.email && touched.email ? true : false}
+                        label="Email"
+                        name="email"
+                        margin="normal"
+                        type=""
+                        required
+                        fullWidth
+                        value={values.email}
+                        onChange={handleChange}
+                        onBlur={handleBlur}
+                        helperText={
+                          errors.email && touched.email ? errors.email : ""
+                        }
+                      />
                     </div>
                   </div>
                 </div>
-              </div>
+
+                <div className="row">
+                  <div className="col d-flex align-items-center">
+                    <div className="form-outline datepicker w-100">
+                      <TextField
+                        error={
+                          errors.password && touched.password ? true : false
+                        }
+                        label="Password"
+                        name="password"
+                        margin="normal"
+                        type="password"
+                        required
+                        fullWidth
+                        value={values.password}
+                        onChange={handleChange}
+                        onBlur={handleBlur}
+                        helperText={
+                          errors.password && touched.password
+                            ? errors.password
+                            : ""
+                        }
+                      />
+                    </div>
+                  </div>
+                </div>
+
+                <div className="mt-4 d-flex justify-content-between align-items-center">
+                  <p>
+                    Don't have an account? <Link to="/register">Sign up</Link>
+                  </p>
+                  <GoogleButton onClick={googleSignIn} />
+                  <button
+                    className="btn btn-primary btn-lg"
+                    type="submit"
+                    style={{ marginTop: "-4px" }}
+                  >
+                    Login
+                  </button>
+                </div>
+              </form>
             </div>
-          </section>
+          </div>
+          //</div>
+          //</div>
+          //</div>
+          //</section>
         )}
       </div>
     </>

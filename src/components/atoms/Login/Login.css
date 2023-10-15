@@ -13,10 +13,8 @@
     rgba(60, 64, 67, 0.15) 0px 2px 6px 2px;
 }
 
-.card-body > h2 {
-  height: 3rem;
-  background-color: #3b71ca;
-  color: white;
+.card-body > h4 {
+  color: black;
   text-align: center;
 }
 

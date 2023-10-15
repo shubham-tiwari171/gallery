@@ -3,6 +3,15 @@ import { initializeApp } from "firebase/app";
 // import { getAnalytics } from "firebase/analytics";
 import { getFirestore } from "firebase/firestore";
 import {
+  getAuth,
+  GoogleAuthProvider,
+  signInWithPopup,
+  createUserWithEmailAndPassword,
+  signInWithEmailAndPassword,
+  onAuthStateChanged,
+  signOut,
+} from "firebase/auth";
+import {
   collection,
   getDocs,
   getDoc,
@@ -35,9 +44,71 @@ const firebaseConfig = {
 // Initialize Firebase
 const app = initializeApp(firebaseConfig);
 // const analytics = getAnalytics(app);
+const auth = getAuth();
 export const db = getFirestore(app);
 export const usersCollectionRef = collection(db, "users");
 export const storage = getStorage(app);
+export const provider = new GoogleAuthProvider();
+
+export const signInWithGoogle = async () => {
+  signInWithPopup(auth, provider)
+    .then((result) => {
+      const credential = GoogleAuthProvider.credentialFromResult(result);
+      const token = credential.accessToken;
+      console.log(token);
+      const user = result.user;
+      console.log(user);
+      return { email: user.email, accessToken: token };
+    })
+    .catch((error) => {
+      const errorCode = error.code;
+      const errorMessage = error.message;
+      const email = error.customData.email;
+      const credential = GoogleAuthProvider.credentialFromError(error);
+    });
+};
+
+export const registerUserWithEmailandPassword = async (email, password) => {
+  // createUserWithEmailAndPassword(auth, email, password)
+  //   .then((userCredential) => {
+  //     const user = userCredential.user;
+  //     console.log(user);
+  //     return user.uid;
+  //   })
+  //   .catch((error) => {
+  //     const errorCode = error.code;
+  //     const errorMessage = error.message;
+  //   });
+  try {
+    const userCredential = await createUserWithEmailAndPassword(
+      auth,
+      email,
+      password
+    );
+    const user = userCredential.user;
+    return user.uid;
+  } catch (error) {
+    console.error("Error registering user:", error);
+    throw new Error(error.message);
+  }
+};
+
+export const signInSchema = async (email, password) => {
+  try {
+    const userCredential = await signInWithEmailAndPassword(
+      auth,
+      email,
+      password
+    );
+    const user = userCredential.user;
+    const accessToken = user.accessToken.toString();
+    console.log(user);
+    return { email: user.email, accessToken: accessToken };
+  } catch (error) {
+    const errorMessage = error.message;
+    throw new Error(errorMessage);
+  }
+};
 
 export const getUserByUserName = async (userName, email) => {
   try {
@@ -56,8 +127,8 @@ export const getUserLoggedIn = async (email, password) => {
   try {
     const q = query(
       usersCollectionRef,
-      where("email", "==", email),
-      where("password", "==", password)
+      where("email", "==", email)
+      // where("password", "==", password)
     );
     const querySnapshot = await getDocs(q);
     const users = querySnapshot.docs.map((doc) => doc.data());
@@ -154,4 +225,13 @@ export const isProfileImageExist = async (profileImageName) => {
     console.error("Error checking profile image existence: ", error);
     return false;
   }
+};
+export const signOutUser = () => {
+  signOut(auth)
+    .then(() => {
+      // Sign-out successful.
+    })
+    .catch((error) => {
+      // An error happened.
+    });
 };

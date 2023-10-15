@@ -12,7 +12,7 @@ import { updateUser, getUser } from "../../../context/firebase";
 import { useNavigate } from "react-router-dom";
 import Snackbar from "@mui/material/Snackbar";
 import MuiAlert from "@mui/material/Alert";
-
+import { useLocation } from "react-router-dom";
 const ImageBoard = ({ selectedImage }) => {
   const { user } = useSelector((state) => state.user);
   const [boards, setBoards] = useState([]);
@@ -33,7 +33,7 @@ const ImageBoard = ({ selectedImage }) => {
   });
   const navigate = useNavigate();
   const dispatch = useDispatch();
-
+  const location = useLocation();
   // useEffect(() => {
   //   fetchData();
   // }, []);
@@ -71,7 +71,8 @@ const ImageBoard = ({ selectedImage }) => {
 
   const handleSaveCard = () => {
     if (!isEditableBoardIdExist) {
-      let currentUser = getUser(user.documentId);
+      //let currentUser = getUser(user.documentId);
+      let currentUser = getUser(user.registerUserWithEmailandPasswordUid);
       let isBoardExist = currentUser?.boards?.some(
         (board) => board.name === boardName.trim()
       );
@@ -284,16 +285,18 @@ const ImageBoard = ({ selectedImage }) => {
                         onClick={() => handleEditClick(board.id)}
                       />
                     </div>
-                    <div className={`${styles["mdIcon"]}`}>
-                      <MdSave
-                        title="Save"
-                        size={20}
-                        className={` ${
-                          cardHoverStates[index] ? "" : styles["hidden"]
-                        }`}
-                        onClick={() => handleSaveImage(board.id)}
-                      />
-                    </div>
+                    {location.pathname.includes("explore") ? null : (
+                      <div className={`${styles["mdIcon"]}`}>
+                        <MdSave
+                          title="Save"
+                          size={20}
+                          className={` ${
+                            cardHoverStates[index] ? "" : styles["hidden"]
+                          }`}
+                          onClick={() => handleSaveImage(board.id)}
+                        />
+                      </div>
+                    )}
                     <div className={`${styles["mdIcon"]}`}>
                       <ImShare
                         title="Show saved images"

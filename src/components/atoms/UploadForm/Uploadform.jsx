@@ -22,6 +22,8 @@ const UploadForm = () => {
   const [totalPageCount, setTotalPageCount] = useState(0);
   const [count, setCount] = useState(0);
   const [openSaveDialog, setOpenSaveDialog] = useState(false);
+  const [seachedData, setSeachedData] = useState([]);
+  const [withoutSeachedData, setWithoutSeachedData] = useState([]);
   useEffect(() => {
     getImage();
   }, [pageNo, searchedText]);
@@ -68,13 +70,58 @@ const UploadForm = () => {
           alert("Invalid response:", response);
         }
       }
-      // setRandomImages((prev) => [...prev, ...response.data]);
+      //setRandomImages((prev) => [...prev, ...response.data]);
       setInitialLoadings(false);
       setIsLoading(false);
     } catch (error) {
       console.error("Error fetching images:", error);
     }
   };
+
+  // const getImage = async () => {
+  //   try {
+  //     let response;
+  //     if (searchedText === "") {
+  //       setIsLoading(true);
+  //       setPreviousSearchResult([]);
+  //       setSeachedData([]);
+  //       setRandomImages([]);
+  //       setCount((prev) => prev + 1);
+
+  //       response = await getAllImages(pageNo, imagesPerPage);
+  //       setRandomImages((prev) => [...prev, ...response.data]);
+  //       setTotalPageCount(Number(response.headers["x-total-count"]));
+  //     } else {
+  //       try {
+  //         if (pageNo === 1 || count === 0) {
+  //           setSeachedData([]);
+  //           setWithoutSeachedData([]);
+  //           setRandomImages([]);
+  //           setCount((prev) => prev + 1);
+  //         }
+
+  //         response = await getSearchedImages(
+  //           pageNo,
+  //           imagesPerPage,
+  //           searchedText
+  //         );
+  //         if (pageNo === 1) {
+  //           setSeachedData(response);
+  //         } else {
+  //           setSeachedData((prev) => [...prev, ...response]);
+  //         }
+  //         setRandomImages((prev) => [...prev, ...response]);
+  //         setPreviousSearchResult(response);
+  //       } catch (e) {
+  //         alert("Invalid response:", response);
+  //       }
+  //     }
+  //     setInitialLoadings(false);
+  //     setIsLoading(false);
+  //   } catch (error) {
+  //     console.error("Error fetching images:", error);
+  //   }
+  // };
 
   const handleInfiniteScroll = () => {
     if (

@@ -21,8 +21,9 @@ import {
   updateUser,
   uplaodProfileImage,
   isProfileImageExist,
+  signOutUser,
 } from "../../../context/firebase";
-
+// import { signInWithGoogle } from "../../../context/firebase";
 const Header = () => {
   const [open, setOpen] = useState(false);
   const [profile, setProfile] = useState({});
@@ -37,19 +38,6 @@ const Header = () => {
   const location = useLocation();
   const boardId =
     location.pathname.split("/")[location.pathname.split("/").length - 1];
-
-  // useEffect(() => {
-  //   const fetchUserProfile = async () => {
-  //     try {
-  //       const result = await getUser(user?.id);
-  //       setProfile(result);
-  //     } catch (error) {
-  //       console.error("Error fetching user profile:", error);
-  //     }
-  //   };
-
-  //   fetchUserProfile();
-  // }, [user?.id]);
 
   useEffect(() => {
     return () => {
@@ -99,9 +87,14 @@ const Header = () => {
   };
 
   const handleLogoutClick = () => {
-    dispatch(logout());
+    //dispatch(logout());
+    signOutUser();
     navigate("/login");
   };
+
+  /*
+      google login   
+  */
 
   const handleLogInClick = () => {
     dispatch(logout());
@@ -130,8 +123,8 @@ const Header = () => {
           profileImage
         );
         const updatedUserProfile = { ...user, profileImage: imageUrl };
+        await updateUser(user.documentId, updatedUserProfile);
         dispatch(setUser(updatedUserProfile));
-        await updateUser(updatedUserProfile);
       }
     }
   };
@@ -235,6 +228,7 @@ const Header = () => {
           <div
             className={styles["navbar-mobile-menu-items"]}
             onClick={handleLogoutClick}
+            //onClick={signInWithGoogle}
             title="Logout"
             style={{
               display: "flex",
@@ -248,6 +242,7 @@ const Header = () => {
           <div
             className={styles["navbar-mobile-menu-items"]}
             onClick={handleLogoutClick}
+            // onClick={signInWithGoogle}
             title="Login"
             style={{
               display: "flex",
@@ -258,10 +253,8 @@ const Header = () => {
             <MdLogin size={30} />
           </div>
         )}
-        <div
-          className={`${styles["menu-items"]} ${styles["profile-menu-items"]}`}
-        >
-          <img src={user.profileImage} alt="" />
+
+        {/* <img src={user.profileImage} alt="" />
 
           <label htmlFor="fileUpload">
             <input
@@ -271,7 +264,24 @@ const Header = () => {
               className={styles["file-input"]}
               onChange={handleSelectProfileImageClick}
             />
-          </label>
+          </label> */}
+        <div className={styles.container}>
+          <div className={`${styles["picture-container"]} `}>
+            <div className={`${styles["picture"]} `}>
+              <img
+                src={user?.profileImage}
+                className={`${styles["picture-src"]} `}
+                id="wizardPicturePreview"
+                title=""
+              />
+              <input
+                type="file"
+                id="wizard-picture"
+                class=""
+                onChange={handleSelectProfileImageClick}
+              />
+            </div>
+          </div>
         </div>
       </div>
 
@@ -341,7 +351,11 @@ const Header = () => {
           className={`${styles["navbar-mobile-menu-items"]} ${styles["profile-menu-items"]}`}
           title="Profile"
         >
-          <img src={user.profileImage} alt="" />
+          <img
+            src={user.profileImage}
+            alt=""
+            className={`${styles["picture-src"]} `}
+          />
 
           <label htmlFor="fileUpload">
             <input

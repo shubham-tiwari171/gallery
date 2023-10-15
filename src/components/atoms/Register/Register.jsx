@@ -23,14 +23,11 @@ import {
   updateUser,
 } from "../../../context/firebase";
 import {
-  collection,
-  getDocs,
-  getDoc,
-  doc,
-  addDoc,
-  query,
-  where,
-} from "firebase/firestore";
+  signInWithGoogle,
+  registerUserWithEmailandPassword,
+} from "../../../context/firebase";
+import GoogleButton from "react-google-button";
+
 const Register = () => {
   const [openSnackbar, setOpenSnackbar] = useState({
     open: false,
@@ -192,12 +189,15 @@ const Register = () => {
 
     try {
       const docRef = await addUser(user);
-
       user = { ...user, documentId: docRef.id };
-      // If the document is successfully added, the docRef contains a reference to the newly created document.
-      console.log("Document added with ID: ", docRef.id);
+      // console.log("Document added with ID: ", docRef.id);
       await updateUser(docRef.id, user);
-
+      let uId = await registerUserWithEmailandPassword(
+        user.email,
+        user.password
+      );
+      user = { ...user, registerUserWithEmailandPasswordUid: uId };
+      await updateUser(docRef.id, user);
       setOpenSnackbar((prevState) => ({
         ...prevState,
         open: true,
@@ -207,12 +207,12 @@ const Register = () => {
       setSnackbarMessage("User registered successfully!");
 
       resetForm();
+
       setTimeout(() => {
         nevigate("/login");
       }, 2000);
     } catch (error) {
       console.error("Error adding document: ", error);
-
       setOpenSnackbar((prevState) => ({
         ...prevState,
         open: true,
@@ -293,7 +293,7 @@ const Register = () => {
                             helperText={
                               errors.email && touched.email ? errors.email : ""
                             }
-                          />{" "}
+                          />
                         </div>
                       </div>
                     </div>
@@ -319,7 +319,7 @@ const Register = () => {
                                 ? errors.password
                                 : ""
                             }
-                          />{" "}
+                          />
                         </div>
                       </div>
                       <div className="col-md-6  d-flex align-items-center">
@@ -344,7 +344,7 @@ const Register = () => {
                                 ? errors.confirmPassword
                                 : ""
                             }
-                          />{" "}
+                          />
                         </div>
                       </div>
                     </div>
@@ -411,16 +411,21 @@ const Register = () => {
                     </div>
 
                     <div className="mt-4 d-flex justify-content-around align-items-center">
-                      <p>
-                        Go back to login? <Link to="/login">Login</Link>
-                      </p>
-                      <button
-                        disabled={createButtonDisabled}
-                        className="btn btn-primary btn-lg"
-                        type="submit"
-                      >
-                        Create
-                      </button>
+                      <div class="child-div-left">
+                        <p>
+                          Go back to login? <Link to="/login">Login</Link>
+                        </p>
+                      </div>
+                      <div class="child-div-right d-flex justify-content-around align-items-center">
+                        <GoogleButton onClick={signInWithGoogle} />
+                        <button
+                          disabled={createButtonDisabled}
+                          className="btn btn-primary btn-lg"
+                          type="submit"
+                        >
+                          Create
+                        </button>
+                      </div>
                     </div>
                   </form>
                 </div>
