@@ -87,36 +87,18 @@ const Header = () => {
   };
 
   const handleLogoutClick = () => {
-    //dispatch(logout());
     signOutUser();
     navigate("/login");
   };
 
-  /*
-      google login   
-  */
-
-  const handleLogInClick = () => {
-    dispatch(logout());
-    navigate("/login");
-  };
+  // const handleLogInClick = () => {
+  //   dispatch(logout());
+  //   navigate("/login");
+  // };
 
   const handleSelectProfileImageClick = async (e) => {
     let profileImage = e.target.files[0];
-
     if (profileImage) {
-      // setProfile(URL.createObjectURL(pic));
-      // let updateUserProfile = {
-      //   ...user,
-      //   profileImage: URL.createObjectURL(pic),
-      // };
-      // dispatch(setUser(updateUserProfile));
-      // try {
-      //   const response = await updatUserProfile(user.id, updateUserProfile);
-      //   console.log(response.data);
-      // } catch (error) {
-      //   console.error("Error updating user profile:", error);
-      // }
       if (isProfileImageExist(profileImage.name)) {
         const imageUrl = await uplaodProfileImage(
           profileImage.name,
@@ -131,8 +113,6 @@ const Header = () => {
 
   const handleSerchedChange = (event) => {
     setSearchText(event.target.value);
-    // console.log(event.target.value);
-    // const response = await getSearchedImages(event.target.value);
     dispatch(search(event.target.value));
   };
 
@@ -228,7 +208,6 @@ const Header = () => {
           <div
             className={styles["navbar-mobile-menu-items"]}
             onClick={handleLogoutClick}
-            //onClick={signInWithGoogle}
             title="Logout"
             style={{
               display: "flex",
@@ -242,7 +221,6 @@ const Header = () => {
           <div
             className={styles["navbar-mobile-menu-items"]}
             onClick={handleLogoutClick}
-            // onClick={signInWithGoogle}
             title="Login"
             style={{
               display: "flex",
