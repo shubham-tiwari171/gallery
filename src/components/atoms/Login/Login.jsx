@@ -148,34 +148,37 @@ const Login = () => {
 
       if (googleSignInData) {
         const providerData = googleSignInData.providerData[0];
-        const user = {
-          uid: uuidv4(),
-          userName: providerData.displayName,
-          email: providerData.email,
-          mobile: providerData.phoneNumber,
-          profileImage: providerData.photoURL,
-          authenticatedUserUid: googleSignInData.uid,
-          boards: [],
-        };
 
         // Check if the user already exists by email or username
-        const userNameExists = await getUserByUserName(user.userName);
-        const userEmailExists = await getUserByEmail(user.email);
+        const userNameExists = await getUserByUserName(
+          providerData.displayName
+        );
+        const userEmailExists = await getUserByEmail(providerData.email);
 
         if (userNameExists.empty && userEmailExists.empty) {
+          var user = {
+            uid: uuidv4(),
+            userName: providerData.displayName,
+            email: providerData.email,
+            mobile: providerData.phoneNumber,
+            profileImage: providerData.photoURL,
+            authenticatedUserUid: googleSignInData.uid,
+            boards: [],
+          };
           const docRef = await addUser(user);
           user.documentId = docRef.id;
           handleVarifiedUser(googleSignInData, user);
           await updateUser(user.documentId, user);
         } else {
-          setOpenSnackbar((prevState) => ({
-            ...prevState,
-            open: true,
-            severity: "warning",
-          }));
-          setSnackbarMessage(
-            "User with the same username or email already exists."
-          );
+          // setOpenSnackbar((prevState) => ({
+          //   ...prevState,
+          //   open: true,
+          //   severity: "warning",
+          // }));
+          // setSnackbarMessage(
+          //   "User with the same username or email already exists."
+          // );
+          handleVarifiedUser(googleSignInData, user);
         }
       } else {
         console.error("Google sign-in data is undefined.");
