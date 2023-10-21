@@ -26,20 +26,15 @@ function App() {
       if (authUser) {
         try {
           if (authUser.providerData[0].providerId === "google.com") {
-            console.log("Google")
             const loggedInUser = await getUserLoggedIn(authUser?.email);
-            console.log("User is logged in:", loggedInUser);
             dispatch(setUser(loggedInUser));
           }
           if (authUser.providerData.providerId === "password") {
-            console.log("Google")
             const loggedInUser = await getUserLoggedIn(authUser?.email);
-            console.log("User is logged in:", loggedInUser);
             dispatch(setUser(loggedInUser));
           }
         } catch (error) {
-          console.error("Error fetching user data:", error);
-          signOut(auth); // Sign out the user in case of an error
+          signOut(auth);
         }
       } else {
         // If there's no authenticated user, navigate to the login page
@@ -49,7 +44,6 @@ function App() {
           }, 30000);
           return () => clearTimeout(timer);
         }
-        console.log("No user is signed in.");
       }
     });
 
