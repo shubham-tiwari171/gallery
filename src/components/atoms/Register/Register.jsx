@@ -39,33 +39,6 @@ const Register = () => {
   const [allUsers, setAllUsers] = useState([]);
   const [createButtonDisabled, setCreateButtonDisabled] = useState(false);
   const nevigate = useNavigate();
-  // const usersCollectionRef = collection(db, "users");
-  // useEffect(() => {
-  //   const fetchUsers = async () => {
-  //     const users = await getAllUser();
-  //     setAllUsers(users);
-  //   };
-
-  //   fetchUsers();
-  // }, []);
-
-  // useEffect(() => {
-  //   const getAllUsers = async () => {
-  //     try {
-  //       const usersCollectionRef = collection(db, "users");
-  //       const usersSnapshot = await getDocs(usersCollectionRef);
-  //       usersSnapshot.forEach((doc) => {
-  //         // Each doc represents a document in the "users" collection
-  //         const userData = doc.data(); // Retrieve the data of the document
-  //         console.log(userData);
-  //       });
-  //       console.log(usersSnapshot.data());
-  //     } catch (error) {
-  //       console.error("Error fetching data:", error);
-  //     }
-  //   };
-  //   getAllUsers();
-  // }, []);
 
   const { values, errors, touched, handleBlur, handleChange, resetForm } =
     useFormik({
@@ -98,13 +71,7 @@ const Register = () => {
   };
 
   const handleSubmit = async (event) => {
-    // for preventing the form from reloading
     event.preventDefault();
-    // console.log(
-    //   "getUserByUserNameAndEmail():-",
-    //   await getUserByUserNameAndEmail(values.userName, values.email)
-    // );
-    // creating user data
     let user = {
       uid: uuidv4(),
       ...values.userName,
@@ -133,46 +100,9 @@ const Register = () => {
     } catch (error) {
       console.error("Error fetching user data:", error);
     }
-
-    // giving message that user already exists in the snackbar
-    // if (isUserExist) {
-    //   setOpenSnackbar((prevState) => ({
-    //     ...prevState,
-    //     open: true,
-    //     severity: "warning",
-    //   }));
-    //   setSnackbarMessage(
-    //     "User with the same username and email already exists."
-    //   );
-    //   return;
-    // }
-
-    // all validation done then creating the user and saving it to the database and displaying a success message
-
-    // if (res.status === 201 && user) {
-    //   setOpenSnackbar((prevState) => ({
-    //     ...prevState,
-    //     open: true,
-    //     severity: "success",
-    //   }));
-    //   setSnackbarMessage("User registered successfully!");
-    //   resetForm();
-    //   setTimeout(() => {
-    //     nevigate("/login");
-    //   }, 2000);
-    // } else {
-    //   setOpenSnackbar((prevState) => ({
-    //     ...prevState,
-    //     open: true,
-    //     severity: "danger",
-    //   }));
-    //   setSnackbarMessage("An error occurred during user registration.");
-    // }
-
     try {
       const docRef = await addUser(user);
       user = { ...user, documentId: docRef.id };
-      // console.log("Document added with ID: ", docRef.id);
       await updateUser(docRef.id, user);
       let uId = await registerUserWithEmailandPassword(
         user.email,
@@ -185,11 +115,8 @@ const Register = () => {
         open: true,
         severity: "success",
       }));
-
       setSnackbarMessage("User registered successfully!");
-
       resetForm();
-
       setTimeout(() => {
         nevigate("/login");
       }, 2000);
