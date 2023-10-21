@@ -25,9 +25,18 @@ function App() {
     const unsubscribe = onAuthStateChanged(auth, async (authUser) => {
       if (authUser) {
         try {
-          const loggedInUser = await getUserLoggedIn(authUser.email);
-          console.log("User is logged in:", loggedInUser);
-          dispatch(setUser(loggedInUser));
+          if (authUser.providerData[0].providerId === "google.com") {
+            console.log("Google")
+            const loggedInUser = await getUserLoggedIn(authUser?.email);
+            console.log("User is logged in:", loggedInUser);
+            dispatch(setUser(loggedInUser));
+          }
+          if (authUser.providerData.providerId === "password") {
+            console.log("Google")
+            const loggedInUser = await getUserLoggedIn(authUser?.email);
+            console.log("User is logged in:", loggedInUser);
+            dispatch(setUser(loggedInUser));
+          }
         } catch (error) {
           console.error("Error fetching user data:", error);
           signOut(auth); // Sign out the user in case of an error

@@ -107,35 +107,18 @@ const Register = () => {
     // creating user data
     let user = {
       uid: uuidv4(),
-      ...values,
+      ...values.userName,
+      ...values.email,
+      ...values.gender,
+      ...values.mobile,
       profileImage: "./male_avatar.png",
       boards: [],
     };
+
     let userName = await getUserByUserName(values.userName);
     let userEmail = await getUserByEmail(values.userName);
-    // checking if the user already exists
-    // let isUserExist = allUsers.find(
-    //   (existedUser) =>
-    //     existedUser.userName === user.userName ||
-    //     existedUser.email === user.email
-    // );
-    // console.log(user);
-    // const usersCollectionRef = collection(db, "users");
 
-    // const userNameQuery = query(
-    //   usersCollectionRef,
-    //   where("userName", "==", values.userName)
-    // );
-    // const userNameQuerySnapshot = await getDocs(userNameQuery);
-
-    // // Check if a user with the same email exists
-    // const emailQuery = query(
-    //   usersCollectionRef,
-    //   where("email", "==", values.email)
-    // );
     try {
-      // const emailQuerySnapshot = await getDocs(emailQuery);
-
       if (!userName.empty || !userEmail.empty) {
         setOpenSnackbar((prevState) => ({
           ...prevState,
@@ -149,7 +132,6 @@ const Register = () => {
       }
     } catch (error) {
       console.error("Error fetching user data:", error);
-      // Handle any errors that occurred during fetching
     }
 
     // giving message that user already exists in the snackbar
@@ -196,7 +178,7 @@ const Register = () => {
         user.email,
         user.password
       );
-      user = { ...user, registerUserWithEmailandPasswordUid: uId };
+      user = { ...user, authenticatedUserUid: uId };
       await updateUser(docRef.id, user);
       setOpenSnackbar((prevState) => ({
         ...prevState,

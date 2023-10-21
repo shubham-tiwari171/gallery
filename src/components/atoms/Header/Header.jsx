@@ -352,7 +352,7 @@ const Header = () => {
           title="Profile"
         >
           <img
-            src={user.profileImage}
+            src={user?.profileImage}
             alt=""
             className={`${styles["picture-src"]} `}
           />

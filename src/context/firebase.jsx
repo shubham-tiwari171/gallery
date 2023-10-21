@@ -51,21 +51,35 @@ export const storage = getStorage(app);
 export const provider = new GoogleAuthProvider();
 
 export const signInWithGoogle = async () => {
-  signInWithPopup(auth, provider)
-    .then((result) => {
-      const credential = GoogleAuthProvider.credentialFromResult(result);
-      const token = credential.accessToken;
-      console.log(token);
-      const user = result.user;
-      console.log(user);
-      return { email: user.email, accessToken: token };
-    })
-    .catch((error) => {
-      const errorCode = error.code;
-      const errorMessage = error.message;
-      const email = error.customData.email;
-      const credential = GoogleAuthProvider.credentialFromError(error);
-    });
+  // signInWithPopup(auth, provider)
+  //   .then((result) => {
+  //     const credential = GoogleAuthProvider.credentialFromResult(result);
+  //     const token = credential.accessToken;
+  //     console.log(token);
+  //     const user = result.user;
+  //     console.log(user);
+  //     return { email: user.email, accessToken: token };
+  //   })
+  //   .catch((error) => {
+  //     const errorCode = error.code;
+  //     const errorMessage = error.message;
+  //     const email = error.customData.email;
+  //     const credential = GoogleAuthProvider.credentialFromError(error);
+  //   });
+  try {
+    const result = await signInWithPopup(auth, provider);
+    const credential = GoogleAuthProvider.credentialFromResult(result);
+    const token = credential.accessToken;
+    const user = result.user;
+    console.log(token);
+    console.log(user);
+    return user;
+  } catch (error) {
+    const errorCode = error.code;
+    const errorMessage = error.message;
+    const email = error.customData.email;
+    const credential = GoogleAuthProvider.credentialFromError(error);
+  }
 };
 
 export const registerUserWithEmailandPassword = async (email, password) => {

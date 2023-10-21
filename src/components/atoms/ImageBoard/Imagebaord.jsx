@@ -72,7 +72,7 @@ const ImageBoard = ({ selectedImage }) => {
   const handleSaveCard = () => {
     if (!isEditableBoardIdExist) {
       //let currentUser = getUser(user.documentId);
-      let currentUser = getUser(user.registerUserWithEmailandPasswordUid);
+      let currentUser = getUser(user.authenticatedUid);
       let isBoardExist = currentUser?.boards?.some(
         (board) => board.name === boardName.trim()
       );

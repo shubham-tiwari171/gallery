@@ -10,11 +10,17 @@ import { useNavigate } from "react-router-dom";
 import { setUser, login } from "../../../redux/reducers/reducers";
 import { useDispatch } from "react-redux";
 import GoogleButton from "react-google-button";
+import { v4 as uuidv4 } from "uuid";
 import {
   signInWithGoogle,
   signInSchema,
   getUserLoggedIn,
+  getUserByUserName,
+  getUserByEmail,
+  addUser,
+  updateUser,
 } from "../../../context/firebase";
+import { getAuth, signInWithPopup, GoogleAuthProvider } from "firebase/auth";
 
 const Login = () => {
   const [openSnackbar, setOpenSnackbar] = useState({
@@ -31,8 +37,11 @@ const Login = () => {
 
   const { values, errors, touched, handleBlur, handleChange } = useFormik({
     initialValues: {
+      userName: "",
       email: "",
       password: "",
+      mobile: "",
+      gender: "",
     },
     validationSchema: signUpSignInSchema,
   });
@@ -54,26 +63,9 @@ const Login = () => {
     }));
     setSnackbarMessage("");
   };
- 
- 
- 
-  const handleVarifiedUser = () => { }
-  
-  const handleSubmit = async (event) => {
-    event.preventDefault();
-    //let token = signInSchema(values.email, values.password);
-    //let user = await getUserLoggedIn(values.email, values.password);
-    // console.log(user);
-    // let isUserExist = allUsers.find(
-    //   (existedUser) =>
-    //     existedUser.email === values.email &&
-    //     existedUser.password === values.password
-    // );
+
+  const handleVarifiedUser = (token, user) => {
     try {
-      // if (user.email === values.email && user.password === values.password) {
-      let token = await signInSchema(values.email, values.password);
-      let user = await getUserLoggedIn(token.email);
-      console.log(user);
       if (
         token.accessToken !== null &&
         token.accessToken !== undefined &&
@@ -103,38 +95,94 @@ const Login = () => {
     }
   };
 
-  const googleSignIn = () => {
+  const handleSubmit = async (event) => {
+    event.preventDefault();
+    //let token = signInSchema(values.email, values.password);
+    //let user = await getUserLoggedIn(values.email, values.password);
+    // console.log(user);
+    // let isUserExist = allUsers.find(
+    //   (existedUser) =>
+    //     existedUser.email === values.email &&
+    //     existedUser.password === values.password
+    // );
+    let token = await signInSchema(values.email, values.password);
+    let user = await getUserLoggedIn(token.email);
+    handleVarifiedUser(token, user);
+    // try {
+    //   // if (user.email === values.email && user.password === values.password) {
+    //   let token = await signInSchema(values.email, values.password);
+    //   let user = await getUserLoggedIn(token.email);
+    //   console.log(user);
+    //   if (
+    //     token.accessToken !== null &&
+    //     token.accessToken !== undefined &&
+    //     token.accessToken !== ""
+    //   ) {
+    //     setOpenSnackbar((prevState) => ({
+    //       ...prevState,
+    //       open: true,
+    //       severity: "success",
+    //     }));
+    //     setSnackbarMessage("Login successfull!");
+    //     setIsLoading(true);
+    //     setTimeout(() => {
+    //       // dispatch(login());
+    //       dispatch(setUser(user));
+    //       // setIsLoading(false);
+    //       navigate("/");
+    //     }, 2000);
+    //   }
+    // } catch (err) {
+    //   setOpenSnackbar((prevState) => ({
+    //     ...prevState,
+    //     open: true,
+    //     severity: "error",
+    //   }));
+    //   setSnackbarMessage("Invalid email or password. Please try again.");
+    // }
+  };
+
+  const googleSignIn = async () => {
     try {
-      let googleProvidedAccessToken = signInWithGoogle();
-      if (
-        token.accessToken !== null &&
-        token.accessToken !== undefined &&
-        token.accessToken !== ""
-      ) {
-        setOpenSnackbar((prevState) => ({
-          ...prevState,
-          open: true,
-          severity: "success",
-        }));
-        setSnackbarMessage("Login successfull!");
-        setIsLoading(true);
-        setTimeout(() => {
-          // dispatch(login());
-          dispatch(setUser(user));
-          // setIsLoading(false);
-          navigate("/");
-        }, 2000);
+      const googleSignInData = await signInWithGoogle();
+
+      if (googleSignInData) {
+        const providerData = googleSignInData.providerData[0];
+        const user = {
+          uid: uuidv4(),
+          userName: providerData.displayName,
+          email: providerData.email,
+          mobile: providerData.phoneNumber,
+          profileImage: providerData.photoURL,
+          authenticatedUserUid: googleSignInData.uid,
+          boards: [],
+        };
+
+        // Check if the user already exists by email or username
+        const userNameExists = await getUserByUserName(user.userName);
+        const userEmailExists = await getUserByEmail(user.email);
+
+        if (userNameExists.empty && userEmailExists.empty) {
+          const docRef = await addUser(user);
+          user.documentId = docRef.id;
+          handleVarifiedUser(googleSignInData, user);
+          await updateUser(user.documentId, user);
+        } else {
+          setOpenSnackbar((prevState) => ({
+            ...prevState,
+            open: true,
+            severity: "warning",
+          }));
+          setSnackbarMessage(
+            "User with the same username or email already exists."
+          );
+        }
+      } else {
+        console.error("Google sign-in data is undefined.");
       }
     } catch (err) {
-      setOpenSnackbar((prevState) => ({
-        ...prevState,
-        open: true,
-        severity: "error",
-      }));
-      setSnackbarMessage("Invalid email or password. Please try again.");
+      console.error("Google sign-in error:", err);
     }
-      
-    } catch {}
   };
 
   return (
