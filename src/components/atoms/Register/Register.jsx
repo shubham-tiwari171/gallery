@@ -74,11 +74,9 @@ const Register = () => {
     event.preventDefault();
     let user = {
       uid: uuidv4(),
-      ...values.userName,
-      ...values.email,
-      ...values.gender,
-      ...values.mobile,
-      profileImage: "./male_avatar.png",
+      ...values,
+      profileImage:
+        values.gender === "male" ? "./male_avatar.jpg" : "./female_avatar.jpg",
       boards: [],
     };
 

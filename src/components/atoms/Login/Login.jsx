@@ -170,14 +170,6 @@ const Login = () => {
           handleVarifiedUser(googleSignInData, user);
           await updateUser(user.documentId, user);
         } else {
-          // setOpenSnackbar((prevState) => ({
-          //   ...prevState,
-          //   open: true,
-          //   severity: "warning",
-          // }));
-          // setSnackbarMessage(
-          //   "User with the same username or email already exists."
-          // );
           handleVarifiedUser(googleSignInData, user);
         }
       } else {

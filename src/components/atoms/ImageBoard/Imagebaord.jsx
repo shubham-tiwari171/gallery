@@ -81,9 +81,10 @@ const ImageBoard = ({ selectedImage }) => {
           id: uuidv4(),
           name: boardName.trim(),
           isEditable: false,
+          createdAt: new Date().toISOString(),
           images: [],
         };
-        const updatedBoard = [...user.boards, newCard];
+        const updatedBoard = [newCard, ...user.boards];
         const updatedUser = { ...user, boards: updatedBoard };
         setIsVisible(true);
         // updatUserPersonalBoard(user.id, updatedUser);

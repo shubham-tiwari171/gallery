@@ -29,7 +29,7 @@ function App() {
             const loggedInUser = await getUserLoggedIn(authUser?.email);
             dispatch(setUser(loggedInUser));
           }
-          if (authUser.providerData.providerId === "password") {
+          if (authUser.providerData[0].providerId === "password") {
             const loggedInUser = await getUserLoggedIn(authUser?.email);
             dispatch(setUser(loggedInUser));
           }
