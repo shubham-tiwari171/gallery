@@ -52,7 +52,6 @@ const Imagedialog = ({ open, selectedImage, handleCloseDialog }) => {
             responseType: "blob", // Set the response type to 'blob'
           });
 
-          // Create a temporary anchor element
           const randomImageNumber =
             Math.floor(Math.random() * (500 - 300 + 1)) + 300;
           const link = document.createElement("a");

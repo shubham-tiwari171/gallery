@@ -82,6 +82,8 @@ const ImageBoard = ({ selectedImage }) => {
           name: boardName.trim(),
           isEditable: false,
           createdAt: new Date().toISOString(),
+          cardBackground:
+            "https://speckyboy.com/wp-content/uploads/2021/05/colorful-abstract-desktop-4k-wallpaper-thumb.jpg",
           images: [],
         };
         const updatedBoard = [newCard, ...user.boards];
@@ -192,7 +194,8 @@ const ImageBoard = ({ selectedImage }) => {
         } else {
           const updatedBoardWithImage = {
             ...updatedBoard,
-            images: [...updatedBoard.images, selectedImage],
+            cardBackground: selectedImage?.urls?.regular,
+            images: [selectedImage, ...updatedBoard?.images],
           };
 
           const updatedBoards = user.boards.map((board, index) =>
@@ -322,7 +325,10 @@ const ImageBoard = ({ selectedImage }) => {
                     </div>
                   </div>
                 </div>
-                <img src="https://helpx.adobe.com/content/dam/help/en/photoshop/using/convert-color-image-black-white/jcr_content/main-pars/before_and_after/image-before/Landscape-Color.jpg" />
+                <img src={board?.cardBackground} alt="" />
+                {/* {user?.boards?.map((image) => (
+                  <img src={user} />
+                ))} */}
               </div>
               {isEditableBoardIdExist === board.id ? (
                 <div className={`${styles["edit-board-name-text-field"]}`}>

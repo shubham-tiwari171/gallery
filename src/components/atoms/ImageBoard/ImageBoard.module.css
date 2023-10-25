@@ -147,7 +147,7 @@
 
 .moreIconGrow:hover {
   gap: 1.3rem;
-  width: 13.5rem;
+  width: 15.5rem;
   /* transition: all 0.3s ease-in-out; */
   z-index: 2; /* Increase z-index on hover to keep the expanded icons above the rest */
 }
