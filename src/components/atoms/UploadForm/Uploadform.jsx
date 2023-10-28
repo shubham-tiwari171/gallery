@@ -52,7 +52,7 @@ const UploadForm = () => {
         }
 
         response = await getAllImages(pageNo, imagesPerPage);
-        setRandomImages((prev) => [...prev, ...response.data]);
+        setRandomImages((prev) => [...prev, ...response?.data]);
         setTotalPageCount(Number(response.headers["x-total-count"]));
       } else {
         try {

@@ -207,82 +207,93 @@ const Login = () => {
             <img src="./loading.gif" alt="Loading" className="loading-gif" />
           </div>
         ) : (
-          // <section className="vh-100 gradient-custom">
-          //<div className="container py-5 h-100">
-          //<div className="row justify-content-center align-items-center h-100">
-          //<div className="d-flex justify-content-center align-items-center">
-          <div className="card" style={{ width: "675px" }}>
-            <div className="card-body">
-              <h4 className="mb-4">Sign in to your account</h4>
-              <form onSubmit={handleSubmit}>
-                <div className="row">
-                  <div className="col">
-                    <div className="form-outline">
-                      <TextField
-                        error={errors.email && touched.email ? true : false}
-                        label="Email"
-                        name="email"
-                        margin="normal"
-                        type=""
-                        required
-                        fullWidth
-                        value={values.email}
-                        onChange={handleChange}
-                        onBlur={handleBlur}
-                        helperText={
-                          errors.email && touched.email ? errors.email : ""
-                        }
-                      />
+          <section className="vh-100 gradient-custom">
+            <div className="container py-5 h-100">
+              <div className="row justify-content-center align-items-center h-100">
+                <div className="d-flex justify-content-center align-items-center">
+                  <div className="card" style={{ width: "675px" }}>
+                    <div className="card-body">
+                      <h4 className="mb-4">Sign in to your account</h4>
+                      <form onSubmit={handleSubmit}>
+                        <div className="row">
+                          <div className="col">
+                            <div className="form-outline">
+                              <TextField
+                                error={
+                                  errors.email && touched.email ? true : false
+                                }
+                                label="Email"
+                                name="email"
+                                margin="normal"
+                                type=""
+                                required
+                                fullWidth
+                                value={values.email}
+                                onChange={handleChange}
+                                onBlur={handleBlur}
+                                helperText={
+                                  errors.email && touched.email
+                                    ? errors.email
+                                    : ""
+                                }
+                              />
+                            </div>
+                          </div>
+                        </div>
+
+                        <div className="row">
+                          <div className="col d-flex align-items-center">
+                            <div className="form-outline datepicker w-100">
+                              <TextField
+                                error={
+                                  errors.password && touched.password
+                                    ? true
+                                    : false
+                                }
+                                label="Password"
+                                name="password"
+                                margin="normal"
+                                type="password"
+                                required
+                                fullWidth
+                                value={values.password}
+                                onChange={handleChange}
+                                onBlur={handleBlur}
+                                helperText={
+                                  errors.password && touched.password
+                                    ? errors.password
+                                    : ""
+                                }
+                              />
+                            </div>
+                          </div>
+                        </div>
+
+                        <div className="bottom-sign-in-area">
+                          <p>
+                            Don't have an account?{" "}
+                            <Link to="/register">Sign up</Link>
+                          </p>
+                          <div className="bottom-sign-in-area-button">
+                            <GoogleButton
+                              className="google-button"
+                              onClick={googleSignIn}
+                            />
+                            <button
+                              className="btn btn-primary btn-lg login-button"
+                              type="submit"
+                            >
+                              Login
+                            </button>
+                          </div>
+                        </div>
+                      </form>
                     </div>
                   </div>
                 </div>
-
-                <div className="row">
-                  <div className="col d-flex align-items-center">
-                    <div className="form-outline datepicker w-100">
-                      <TextField
-                        error={
-                          errors.password && touched.password ? true : false
-                        }
-                        label="Password"
-                        name="password"
-                        margin="normal"
-                        type="password"
-                        required
-                        fullWidth
-                        value={values.password}
-                        onChange={handleChange}
-                        onBlur={handleBlur}
-                        helperText={
-                          errors.password && touched.password
-                            ? errors.password
-                            : ""
-                        }
-                      />
-                    </div>
-                  </div>
-                </div>
-
-                <div className="mt-4 d-flex justify-content-between align-items-center">
-                  <p>
-                    Don't have an account? <Link to="/register">Sign up</Link>
-                  </p>
-                  <GoogleButton onClick={googleSignIn} />
-                  <button
-                    className="btn btn-primary btn-lg"
-                    type="submit"
-                    style={{ marginTop: "-4px" }}
-                  >
-                    Login
-                  </button>
-                </div>
-              </form>
+              </div>
             </div>
-          </div>
-          //</div>
-          //</div>
-          //</div>
-          //</section>
+          </section>
         )}
       </div>
     </>

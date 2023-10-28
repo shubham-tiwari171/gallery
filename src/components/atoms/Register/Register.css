@@ -21,3 +21,39 @@
 .child-div-left {
   width: 55%;
 }
+
+.bottom-register-in-area {
+  margin-top: 1rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+.create-button {
+  margin-left: 10px;
+  display: flex;
+}
+.bottom-register-in-area-button {
+  display: flex;
+  justify-content: space-between;
+}
+@media (max-width: 768px) {
+  .bottom-register-in-area {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+  }
+  .bottom-register-in-area-button {
+    width: 100%;
+    margin-top: 1rem;
+    display: flex;
+    flex-direction: column;
+  }
+  .create-button {
+    display: block;
+    margin-left: 0px;
+    margin-top: 10px;
+  }
+  .google-button {
+    width: 100% !important;
+  }
+}

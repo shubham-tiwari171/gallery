@@ -317,17 +317,20 @@ const Register = () => {
                       </div>
                     </div>
 
-                    <div className="mt-4 d-flex justify-content-around align-items-center">
+                    <div className="bottom-register-in-area ">
                       <div class="child-div-left">
                         <p>
                           Go back to login? <Link to="/login">Login</Link>
                         </p>
                       </div>
-                      <div class="child-div-right d-flex justify-content-around align-items-center">
-                        <GoogleButton onClick={signInWithGoogle} />
+                      <div class="bottom-register-in-area-button">
+                        <GoogleButton
+                          className="google-button"
+                          onClick={signInWithGoogle}
+                        />
                         <button
                           disabled={createButtonDisabled}
-                          className="btn btn-primary btn-lg"
+                          className="btn btn-primary btn-lg create-button"
                           type="submit"
                         >
                           Create

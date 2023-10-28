@@ -69,11 +69,11 @@ const ImageBoard = ({ selectedImage }) => {
     setIsVisible(false);
   };
 
-  const handleSaveCard = () => {
+  const handleSaveCard = async () => {
     if (!isEditableBoardIdExist) {
       //let currentUser = getUser(user.documentId);
-      let currentUser = getUser(user.authenticatedUid);
-      let isBoardExist = currentUser?.boards?.some(
+      //let currentUser = await getUser(user?.authenticatedUid);
+      let isBoardExist = user?.boards?.some(
         (board) => board.name === boardName.trim()
       );
       if (!isBoardExist && boardName.trim() !== "") {
@@ -82,8 +82,7 @@ const ImageBoard = ({ selectedImage }) => {
           name: boardName.trim(),
           isEditable: false,
           createdAt: new Date().toISOString(),
-          cardBackground:
-            "https://speckyboy.com/wp-content/uploads/2021/05/colorful-abstract-desktop-4k-wallpaper-thumb.jpg",
+          cardBackground: "./wallpaper-thumb.jpg",
           images: [],
         };
         const updatedBoard = [newCard, ...user.boards];
@@ -95,7 +94,12 @@ const ImageBoard = ({ selectedImage }) => {
         setBoardName("");
         // fetchData();
       } else {
-        alert("Board with the same name already exists.");
+        setOpenSnackbar((prevState) => ({
+          ...prevState,
+          open: true,
+          severity: "error",
+        }));
+        setSnackbarMessage("Board with the same name already exists.");
       }
     } else {
       if (boardName !== "") return handleEditBoardName();
