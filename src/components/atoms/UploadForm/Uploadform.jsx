@@ -78,51 +78,6 @@ const UploadForm = () => {
     }
   };
 
-  // const getImage = async () => {
-  //   try {
-  //     let response;
-  //     if (searchedText === "") {
-  //       setIsLoading(true);
-  //       setPreviousSearchResult([]);
-  //       setSeachedData([]);
-  //       setRandomImages([]);
-  //       setCount((prev) => prev + 1);
-
-  //       response = await getAllImages(pageNo, imagesPerPage);
-  //       setRandomImages((prev) => [...prev, ...response.data]);
-  //       setTotalPageCount(Number(response.headers["x-total-count"]));
-  //     } else {
-  //       try {
-  //         if (pageNo === 1 || count === 0) {
-  //           setSeachedData([]);
-  //           setWithoutSeachedData([]);
-  //           setRandomImages([]);
-  //           setCount((prev) => prev + 1);
-  //         }
-
-  //         response = await getSearchedImages(
-  //           pageNo,
-  //           imagesPerPage,
-  //           searchedText
-  //         );
-  //         if (pageNo === 1) {
-  //           setSeachedData(response);
-  //         } else {
-  //           setSeachedData((prev) => [...prev, ...response]);
-  //         }
-  //         setRandomImages((prev) => [...prev, ...response]);
-  //         setPreviousSearchResult(response);
-  //       } catch (e) {
-  //         alert("Invalid response:", response);
-  //       }
-  //     }
-  //     setInitialLoadings(false);
-  //     setIsLoading(false);
-  //   } catch (error) {
-  //     console.error("Error fetching images:", error);
-  //   }
-  // };
-
   const handleInfiniteScroll = () => {
     if (
       window.innerHeight + document.documentElement.scrollTop >=

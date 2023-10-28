@@ -21,6 +21,7 @@ import {
   updateUser,
 } from "../../../context/firebase";
 import { getAuth, signInWithPopup, GoogleAuthProvider } from "firebase/auth";
+import Loading from "../Loading/Loading";
 
 const Login = () => {
   const [openSnackbar, setOpenSnackbar] = useState({
@@ -46,16 +47,6 @@ const Login = () => {
     validationSchema: signUpSignInSchema,
   });
 
-  // useEffect(() => {
-  //   const fetchUsers = async () => {
-  //     setIsLoading(true);
-  //     const users = await getAllUser();
-  //     setAllUsers(users);
-  //     setIsLoading(false);
-  //   };
-  //   fetchUsers();
-  // }, []);
-
   const handleSnackbarClose = () => {
     setOpenSnackbar((prevState) => ({
       ...prevState,
@@ -71,19 +62,18 @@ const Login = () => {
         token.accessToken !== undefined &&
         token.accessToken !== ""
       ) {
+        setIsLoading(false);
         setOpenSnackbar((prevState) => ({
           ...prevState,
           open: true,
           severity: "success",
         }));
         setSnackbarMessage("Login successfull!");
-        setIsLoading(true);
-        setTimeout(() => {
-          // dispatch(login());
-          dispatch(setUser(user));
-          // setIsLoading(false);
-          navigate("/");
-        }, 2000);
+        // setIsLoading(true);
+        // setTimeout(() => {
+        dispatch(setUser(user));
+        navigate("/");
+        // }, 3000);
       }
     } catch (err) {
       setOpenSnackbar((prevState) => ({
@@ -97,49 +87,10 @@ const Login = () => {
 
   const handleSubmit = async (event) => {
     event.preventDefault();
-    //let token = signInSchema(values.email, values.password);
-    //let user = await getUserLoggedIn(values.email, values.password);
-    // console.log(user);
-    // let isUserExist = allUsers.find(
-    //   (existedUser) =>
-    //     existedUser.email === values.email &&
-    //     existedUser.password === values.password
-    // );
+    setIsLoading(true);
     let token = await signInSchema(values.email, values.password);
     let user = await getUserLoggedIn(token.email);
     handleVarifiedUser(token, user);
-    // try {
-    //   // if (user.email === values.email && user.password === values.password) {
-    //   let token = await signInSchema(values.email, values.password);
-    //   let user = await getUserLoggedIn(token.email);
-    //   console.log(user);
-    //   if (
-    //     token.accessToken !== null &&
-    //     token.accessToken !== undefined &&
-    //     token.accessToken !== ""
-    //   ) {
-    //     setOpenSnackbar((prevState) => ({
-    //       ...prevState,
-    //       open: true,
-    //       severity: "success",
-    //     }));
-    //     setSnackbarMessage("Login successfull!");
-    //     setIsLoading(true);
-    //     setTimeout(() => {
-    //       // dispatch(login());
-    //       dispatch(setUser(user));
-    //       // setIsLoading(false);
-    //       navigate("/");
-    //     }, 2000);
-    //   }
-    // } catch (err) {
-    //   setOpenSnackbar((prevState) => ({
-    //     ...prevState,
-    //     open: true,
-    //     severity: "error",
-    //   }));
-    //   setSnackbarMessage("Invalid email or password. Please try again.");
-    // }
   };
 
   const googleSignIn = async () => {
@@ -203,9 +154,10 @@ const Login = () => {
       </Snackbar>
       <div className={`container ${isLoading ? "loading" : ""}`}>
         {isLoading ? (
-          <div className="loading-gif-container">
-            <img src="./loading.gif" alt="Loading" className="loading-gif" />
-          </div>
+          // <div className="loading-gif-container">
+          //   <img src="./loading.gif" alt="Loading" className="loading-gif" />
+          // </div>
+          <Loading />
         ) : (
           <section className="vh-100 gradient-custom">
             <div className="container py-5 h-100">
