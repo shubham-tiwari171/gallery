@@ -22,6 +22,7 @@ import {
   uplaodProfileImage,
   isProfileImageExist,
   signOutUser,
+  getAllImages,
 } from "../../../context/firebase";
 // import { signInWithGoogle } from "../../../context/firebase";
 const Header = () => {
@@ -45,7 +46,14 @@ const Header = () => {
     };
   }, [location.pathname]);
 
-  const handleClick = () => {};
+  const handleUploadClick = () => {
+    const arr = [
+      { id: 1, name: "shubham" },
+      { id: 1, name: "shubham" },
+      { id: 1, name: "shubham" },
+    ];
+    getAllImages(arr);
+  };
 
   const handleClickOpen = () => {
     setOpen(true);
@@ -184,8 +192,8 @@ const Header = () => {
         >
           Explore
         </div>
-        <div className={styles["menu-items"]} onClick={handleClick}>
-          Create
+        <div className={styles["menu-items"]} onClick={handleUploadClick}>
+          Upload
         </div>
         {location.pathname.includes("/savedImages") && (
           <div className={styles["menu-items"]} onClick={handleImageDelete}>
@@ -282,7 +290,7 @@ const Header = () => {
         </div>
         <div
           className={styles["navbar-mobile-menu-items"]}
-          onClick={handleClick}
+          onClick={handleUploadClick}
           title="Create board"
         >
           <RxPlus size={25} />

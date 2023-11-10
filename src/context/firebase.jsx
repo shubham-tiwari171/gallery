@@ -24,12 +24,13 @@ import {
 } from "firebase/firestore";
 import {
   getStorage,
-  ref,
+  // ref,
   uploadBytes,
   getDownloadURL,
   listAll,
   deleteObject,
 } from "firebase/storage";
+import { getDatabase, ref, push } from "firebase/database";
 
 const firebaseConfig = {
   apiKey: "AIzaSyC1REgnLg8Ho5w1bjXx_xpFyzrOTab3H3E",
@@ -47,8 +48,35 @@ const app = initializeApp(firebaseConfig);
 const auth = getAuth();
 export const db = getFirestore(app);
 export const usersCollectionRef = collection(db, "users");
+export const imageCollectionRef = collection(db, "imageCollection");
 export const storage = getStorage(app);
 export const provider = new GoogleAuthProvider();
+//export const imageCollectionRef = ref(db, "imageCollection");
+
+export const getAllImages = async (newData) => {
+  try {
+    const arr = [
+      { id: 1, name: "shubham" },
+      { id: 1, name: "shubham" },
+      { id: 1, name: "shubham" },
+    ];
+    const querySnapshot = await getDocs(imageCollectionRef);
+    const data = querySnapshot.docs.map((doc) => doc.data())[0];
+    const docId = querySnapshot.docs.map((doc) => doc.id)[0];
+    console.log(docId);
+    // const data = querySnapshot.docs;
+    console.log(data);
+    const uploadedImage = { images: [...arr] };
+    console.log(updateDoc);
+    data.data = { ...uploadedImage };
+    console.log(data);
+    const updateImages = await updateDoc(doc(imageCollectionRef, docId), data);
+    // arr.forEach((data) => {
+    //   const imageCollectionRefReturn = push(imageCollectionRef, data);
+    //   console.log(imageCollectionRefReturn.key);
+    // });
+  } catch (err) {}
+};
 
 export const signInWithGoogle = async () => {
   // signInWithPopup(auth, provider)
@@ -71,8 +99,8 @@ export const signInWithGoogle = async () => {
     const credential = GoogleAuthProvider.credentialFromResult(result);
     const token = credential.accessToken;
     const user = result.user;
-    console.log(token);
-    console.log(user);
+    // console.log(token);
+    // console.log(user);
     return user;
   } catch (error) {
     const errorCode = error.code;
@@ -83,16 +111,6 @@ export const signInWithGoogle = async () => {
 };
 
 export const registerUserWithEmailandPassword = async (email, password) => {
-  // createUserWithEmailAndPassword(auth, email, password)
-  //   .then((userCredential) => {
-  //     const user = userCredential.user;
-  //     console.log(user);
-  //     return user.uid;
-  //   })
-  //   .catch((error) => {
-  //     const errorCode = error.code;
-  //     const errorMessage = error.message;
-  //   });
   try {
     const userCredential = await createUserWithEmailAndPassword(
       auth,

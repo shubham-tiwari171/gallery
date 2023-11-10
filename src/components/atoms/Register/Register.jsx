@@ -15,8 +15,9 @@ import MuiAlert from "@mui/material/Alert";
 import { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { Link } from "react-router-dom";
+import Loading from "../Loading/Loading";
+
 import {
-  usersCollectionRef,
   getUserByUserName,
   getUserByEmail,
   addUser,
@@ -36,7 +37,8 @@ const Register = () => {
     severity: "warning",
   });
   const [snackbarMessage, setSnackbarMessage] = useState("");
-  const [allUsers, setAllUsers] = useState([]);
+  //const [allUsers, setAllUsers] = useState([]);
+  const [isLoading, setIsLoading] = useState(false);
   const [createButtonDisabled, setCreateButtonDisabled] = useState(false);
   const nevigate = useNavigate();
 
@@ -72,6 +74,7 @@ const Register = () => {
 
   const handleSubmit = async (event) => {
     event.preventDefault();
+    setIsLoading(true);
     let user = {
       uid: uuidv4(),
       ...values,
@@ -93,6 +96,7 @@ const Register = () => {
         setSnackbarMessage(
           "User with the same username or email already exists."
         );
+        setIsLoading(false);
         return;
       }
     } catch (error) {
@@ -115,6 +119,7 @@ const Register = () => {
       }));
       setSnackbarMessage("User registered successfully!");
       resetForm();
+      setIsLoading(false);
       setTimeout(() => {
         nevigate("/login");
       }, 2000);
@@ -125,7 +130,7 @@ const Register = () => {
         open: true,
         severity: "error",
       }));
-
+      setIsLoading(false);
       setSnackbarMessage("An error occurred during user registration.");
     }
   };
@@ -158,7 +163,18 @@ const Register = () => {
             <div className="col-12 col-lg-9 col-xl-7">
               <div className="card shadow-2-strong card-registration">
                 <div className="card-body">
-                  <h2 className="mb-4">Create your account</h2>
+                  <div className="heading">
+                    <div className="heading-name">
+                      <h2 className="mb-4">Create your account</h2>
+                    </div>
+                    {isLoading && (
+                      <Loading
+                        top={7}
+                        left={20}
+                        className={"loaderHeightWidth"}
+                      />
+                    )}
+                  </div>
                   <form onSubmit={handleSubmit}>
                     <div className="row">
                       <div className="col-md-6 ">

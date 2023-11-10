@@ -89,7 +89,7 @@ const ImageBoard = ({ selectedImage }) => {
         const updatedUser = { ...user, boards: updatedBoard };
         setIsVisible(true);
         // updatUserPersonalBoard(user.id, updatedUser);
-        updateUser(user.documentId, updatedUser);
+        await updateUser(user.documentId, updatedUser);
         dispatch(setUser(updatedUser));
         setBoardName("");
         // fetchData();
