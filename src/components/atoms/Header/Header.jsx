@@ -1,16 +1,16 @@
 import React, { useState, useEffect } from "react";
 import styles from "./Header.module.css";
-import axios from "axios";
+//import axios from "axios";
 import { MdHome, MdExplore, MdLogout, MdLogin, MdDelete } from "react-icons/md";
 import { RxPlus } from "react-icons/rx";
-import { updatUserProfile } from "../../../api/apiEndpoint";
+//import { updatUserProfile } from "../../../api/apiEndpoint";
 import { useSelector, useDispatch } from "react-redux";
-import { setUser, logout } from "../../../redux/reducers/reducers";
-import { getUser } from "../../../api/apiEndpoint";
+import { setUser } from "../../../redux/reducers/reducers";
+//import { getUser } from "../../../api/apiEndpoint";
 import { useNavigate, useLocation } from "react-router-dom";
 import { search, deleteSelectedImage } from "../../../redux/reducers/reducers";
-import { getSearchedImages } from "../../../api/apiEndpoint";
-import { border } from "@mui/system";
+//import { getSearchedImages } from "../../../api/apiEndpoint";
+//import { border } from "@mui/system";
 import Button from "@mui/material/Button";
 import Dialog from "@mui/material/Dialog";
 import DialogActions from "@mui/material/DialogActions";
@@ -20,15 +20,16 @@ import DialogTitle from "@mui/material/DialogTitle";
 import {
   updateUser,
   uplaodProfileImage,
-  isProfileImageExist,
+  //isProfileImageExist,
   signOutUser,
   getAllImages,
 } from "../../../context/firebase";
 // import { signInWithGoogle } from "../../../context/firebase";
+import { getData } from "../../../context/realtimedatabse";
 const Header = () => {
   const [open, setOpen] = useState(false);
-  const [profile, setProfile] = useState({});
-  const [fileUpload, setFileUpload] = useState(null);
+  //const [profile, setProfile] = useState({});
+  //const [fileUpload, setFileUpload] = useState(null);
   const [searchText, setSearchText] = useState("");
   const [hideDeletePallete, sethideDeletePallete] = useState("");
   const dispatch = useDispatch();
@@ -47,12 +48,8 @@ const Header = () => {
   }, [location.pathname]);
 
   const handleUploadClick = () => {
-    const arr = [
-      { id: 1, name: "shubham" },
-      { id: 1, name: "shubham" },
-      { id: 1, name: "shubham" },
-    ];
-    getAllImages(arr);
+    getData();
+    //getAllImages();
   };
 
   const handleClickOpen = () => {
@@ -107,15 +104,22 @@ const Header = () => {
   const handleSelectProfileImageClick = async (e) => {
     let profileImage = e.target.files[0];
     if (profileImage) {
-      if (isProfileImageExist(profileImage.name)) {
-        const imageUrl = await uplaodProfileImage(
-          profileImage.name,
-          profileImage
-        );
-        const updatedUserProfile = { ...user, profileImage: imageUrl };
-        await updateUser(user.documentId, updatedUserProfile);
-        dispatch(setUser(updatedUserProfile));
-      }
+      const imageUrl = await uplaodProfileImage(
+        profileImage.name,
+        profileImage
+      );
+      const updatedUserProfile = { ...user, profileImage: imageUrl };
+      await updateUser(user.documentId, updatedUserProfile);
+      dispatch(setUser(updatedUserProfile));
+      // if (isProfileImageExist(profileImage.name)) {
+      //   const imageUrl = await uplaodProfileImage(
+      //     profileImage.name,
+      //     profileImage
+      //   );
+      //   const updatedUserProfile = { ...user, profileImage: imageUrl };
+      //   await updateUser(user.documentId, updatedUserProfile);
+      //   dispatch(setUser(updatedUserProfile));
+      // }
     }
   };
 

@@ -24,13 +24,12 @@ import {
 } from "firebase/firestore";
 import {
   getStorage,
-  // ref,
+  ref,
   uploadBytes,
   getDownloadURL,
   listAll,
   deleteObject,
 } from "firebase/storage";
-import { getDatabase, ref, push } from "firebase/database";
 
 const firebaseConfig = {
   apiKey: "AIzaSyC1REgnLg8Ho5w1bjXx_xpFyzrOTab3H3E",
@@ -65,16 +64,17 @@ export const getAllImages = async (newData) => {
     const docId = querySnapshot.docs.map((doc) => doc.id)[0];
     console.log(docId);
     // const data = querySnapshot.docs;
-    console.log(data);
-    const uploadedImage = { images: [...arr] };
-    console.log(updateDoc);
-    data.data = { ...uploadedImage };
-    console.log(data);
-    const updateImages = await updateDoc(doc(imageCollectionRef, docId), data);
+    //console.log(data);
+    // const uploadedImage = { images: [...arr] };
+    // console.log(updateDoc);
+    // data.data = { ...uploadedImage };
+    // console.log(data);
+    // const updateImages = await updateDoc(doc(imageCollectionRef, docId), data);
     // arr.forEach((data) => {
     //   const imageCollectionRefReturn = push(imageCollectionRef, data);
     //   console.log(imageCollectionRefReturn.key);
     // });
+    for (let i = 0; i < arr.length; i++) {}
   } catch (err) {}
 };
 
@@ -223,7 +223,6 @@ export const getUser = async (userdocId) => {
     const users = querySnapshot.data();
     return users;
   } catch (error) {
-    console.error("Error deleting document: ", error);
     return false;
   }
 };
@@ -234,10 +233,7 @@ export const uplaodProfileImage = async (profileImageName, profileImage) => {
     await uploadBytes(fileFolderRef, profileImage);
     const imageUrl = await getDownloadURL(fileFolderRef);
     return imageUrl;
-  } catch (error) {
-    console.error("Uploading file: ", error);
-    return false;
-  }
+  } catch (error) {}
 };
 
 export const isProfileImageExist = async (profileImageName) => {

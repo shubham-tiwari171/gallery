@@ -6,6 +6,7 @@ import Imagedialog from "../ImageDialog/Imagedialog";
 import Loading from "../Loading/Loading";
 import { getAllImages, getSearchedImages } from "../../../api/apiEndpoint";
 import PersonalGallery from "../PersonalGallery/PersonalGallery";
+import { getData } from "../../../context/realtimedatabse";
 
 const UploadForm = () => {
   const { searchedText } = useSelector(
