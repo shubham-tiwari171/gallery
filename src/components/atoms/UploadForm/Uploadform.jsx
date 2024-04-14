@@ -6,7 +6,7 @@ import Imagedialog from "../ImageDialog/Imagedialog";
 import Loading from "../Loading/Loading";
 import { getAllImages, getSearchedImages } from "../../../api/apiEndpoint";
 import PersonalGallery from "../PersonalGallery/PersonalGallery";
-import { getData } from "../../../context/realtimedatabse";
+//import { getAllImages } from "../../../context/firebase";
 
 const UploadForm = () => {
   const { searchedText } = useSelector(
@@ -51,6 +51,9 @@ const UploadForm = () => {
           setRandomImages([]);
           setCount((prev) => prev + 1);
         }
+
+        // response = await getAllImages(pageNo, imagesPerPage);
+        // setRandomImages((prev) => [...prev, ...response?.data]);
 
         response = await getAllImages(pageNo, imagesPerPage);
         setRandomImages((prev) => [...prev, ...response?.data]);
@@ -119,7 +122,7 @@ const UploadForm = () => {
         <div className="output">
           {randomImages.map((image, index) => (
             <div
-              key={image.id}
+              key={image?.id}
               className={`card ${
                 index % 3 === 0
                   ? " card_small"
@@ -129,8 +132,8 @@ const UploadForm = () => {
               }`}
             >
               <img
-                src={image.urls.regular}
-                alt={image.alt_description}
+                src={image?.urls?.regular}
+                alt={image?.alt_description}
                 className={"image"}
               />
               <div

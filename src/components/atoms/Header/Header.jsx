@@ -22,6 +22,7 @@ import {
   uplaodProfileImage,
   //isProfileImageExist,
   signOutUser,
+  uploadImage,
   getAllImages,
 } from "../../../context/firebase";
 // import { signInWithGoogle } from "../../../context/firebase";
@@ -48,8 +49,9 @@ const Header = () => {
   }, [location.pathname]);
 
   const handleUploadClick = () => {
-    getData();
-    //getAllImages();
+    //getData();
+    // uploadImage();
+    getAllImages();
   };
 
   const handleClickOpen = () => {

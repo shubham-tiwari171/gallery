@@ -1,7 +1,9 @@
 // Import the functions you need from the SDKs you need
 import { initializeApp } from "firebase/app";
 // import { getAnalytics } from "firebase/analytics";
-import { getFirestore } from "firebase/firestore";
+// import { getFirestore, limit } from "firebase/firestore";
+// import { images } from "../../../";
+import { images } from "../data";
 import {
   getAuth,
   GoogleAuthProvider,
@@ -21,6 +23,9 @@ import {
   where,
   updateDoc,
   deleteDoc,
+  getFirestore,
+  limit,
+  orderBy,
 } from "firebase/firestore";
 import {
   getStorage,
@@ -52,30 +57,40 @@ export const storage = getStorage(app);
 export const provider = new GoogleAuthProvider();
 //export const imageCollectionRef = ref(db, "imageCollection");
 
-export const getAllImages = async (newData) => {
+export const uploadImage = async (newData) => {
   try {
-    const arr = [
-      { id: 1, name: "shubham" },
-      { id: 1, name: "shubham" },
-      { id: 1, name: "shubham" },
-    ];
+    let newData = [];
+    const arr = images;
+    arr.forEach((image) => {
+      delete image.breadcrumbs;
+      delete image.links;
+      delete image.likes;
+      delete image.liked_by_user;
+      delete image.sponsorship;
+      delete image.topic_submissions;
+      delete image.user;
+      delete image.tags;
+      newData.push(image);
+    });
     const querySnapshot = await getDocs(imageCollectionRef);
-    const data = querySnapshot.docs.map((doc) => doc.data())[0];
+    let imageCollection = querySnapshot.docs.map((doc) => doc.data())[0];
     const docId = querySnapshot.docs.map((doc) => doc.id)[0];
-    console.log(docId);
-    // const data = querySnapshot.docs;
-    //console.log(data);
-    // const uploadedImage = { images: [...arr] };
-    // console.log(updateDoc);
-    // data.data = { ...uploadedImage };
-    // console.log(data);
-    // const updateImages = await updateDoc(doc(imageCollectionRef, docId), data);
-    // arr.forEach((data) => {
-    //   const imageCollectionRefReturn = push(imageCollectionRef, data);
-    //   console.log(imageCollectionRefReturn.key);
-    // });
-    for (let i = 0; i < arr.length; i++) {}
+    console.log(imageCollection);
+    const updatedData = { images: [...newData] };
+    await updateDoc(doc(imageCollectionRef, docId), updatedData);
   } catch (err) {}
+};
+
+export const getAllImages = async () => {
+  let q = query(imageCollectionRef, limit(10));
+
+  const querySnapshot = await getDocs(q);
+
+  console.log("Number of Documents:", querySnapshot.size);
+
+  querySnapshot.forEach((doc) => {
+    console.log("Document Data:", doc.data());
+  });
 };
 
 export const signInWithGoogle = async () => {
